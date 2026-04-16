@@ -1,0 +1,117 @@
+{
+  "project": {
+    "name": "My SaaS Platform",
+    "description": "A full-stack SaaS application with authentication, billing, and a dashboard.",
+    "version": "1.0.0"
+  },
+  "milestones": [
+    {
+      "id": "M0",
+      "title": "Foundation & Setup",
+      "description": "Establish the project skeleton, tooling, CI/CD, and core infrastructure."
+    },
+    {
+      "id": "M1",
+      "title": "Authentication",
+      "description": "Implement full user authentication flow including registration, login, and password reset."
+    },
+    {
+      "id": "M2",
+      "title": "Billing & Subscriptions",
+      "description": "Integrate Stripe for subscription management, webhooks, and customer portal."
+    }
+  ],
+  "tickets": [
+    {
+      "id": "T-001",
+      "title": "Initialize repository and tooling",
+      "description": "Set up the monorepo structure, linters, formatters, and pre-commit hooks to enforce code quality from day one.",
+      "milestone": "M0",
+      "labels": ["setup", "devops"],
+      "tasks": [
+        "Create repository and branch protection rules",
+        "Configure ESLint and Prettier",
+        "Add pre-commit hooks with Husky",
+        "Set up GitHub Actions CI pipeline"
+      ],
+      "acceptance_criteria": [
+        "CI pipeline runs on every pull request",
+        "Pre-commit hooks block commits that fail lint",
+        "README documents how to run the project locally"
+      ],
+      "learning_goals": [
+        "Understand monorepo tooling trade-offs",
+        "Learn GitHub Actions workflow syntax"
+      ]
+    },
+    {
+      "id": "T-002",
+      "title": "Design and implement database schema",
+      "description": "Define the initial PostgreSQL schema for users, teams, and subscriptions using an ORM migration tool.",
+      "milestone": "M0",
+      "labels": ["database", "backend"],
+      "tasks": [
+        "Choose and install ORM (SQLAlchemy / Prisma)",
+        "Design ERD for users, teams, and subscriptions",
+        "Write and run initial migrations",
+        "Seed database with dev fixtures"
+      ],
+      "acceptance_criteria": [
+        "Migrations run cleanly on a fresh database",
+        "ERD diagram is committed to the repo under /docs",
+        "All tables have created_at and updated_at columns"
+      ],
+      "learning_goals": [
+        "Practice schema normalization",
+        "Understand migration rollback strategies"
+      ]
+    },
+    {
+      "id": "T-003",
+      "title": "User registration and login endpoints",
+      "description": "Build REST API endpoints for user registration and JWT-based login, including input validation and password hashing.",
+      "milestone": "M1",
+      "labels": ["backend", "authentication", "security"],
+      "tasks": [
+        "POST /auth/register — validate input, hash password, create user",
+        "POST /auth/login — verify credentials, return JWT + refresh token",
+        "Implement token refresh endpoint",
+        "Add rate limiting to auth routes"
+      ],
+      "acceptance_criteria": [
+        "Passwords are hashed with bcrypt (cost factor >= 12)",
+        "JWT expires in 15 minutes; refresh token in 7 days",
+        "Returns 429 after 10 failed login attempts per IP",
+        "All endpoints have integration tests"
+      ],
+      "learning_goals": [
+        "Understand JWT vs session-based auth",
+        "Learn secure password storage best practices"
+      ]
+    },
+    {
+      "id": "T-004",
+      "title": "Stripe subscription checkout flow",
+      "description": "Implement a Stripe Checkout session for new subscribers, handle the success/cancel redirects, and store subscription state in the database.",
+      "milestone": "M2",
+      "labels": ["billing", "backend", "stripe"],
+      "tasks": [
+        "Install and configure Stripe SDK",
+        "Create endpoint to initiate Checkout session",
+        "Handle checkout.session.completed webhook event",
+        "Store subscription ID and status on the user record",
+        "Display current plan on the account settings page"
+      ],
+      "acceptance_criteria": [
+        "Users can complete a checkout and gain access immediately",
+        "Webhook signature is validated before processing",
+        "Failed payments transition subscription to past_due status",
+        "Stripe Customer Portal link is available on account settings"
+      ],
+      "learning_goals": [
+        "Understand Stripe's payment lifecycle",
+        "Learn idempotent webhook handling patterns"
+      ]
+    }
+  ]
+}
