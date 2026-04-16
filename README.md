@@ -1,5 +1,7 @@
 # gh-project-initializer
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A Python script that reads a hierarchical project JSON file and bootstraps a GitHub repository with milestones, labels, issues, and a GitHub Project V2 — all in one command.
 
 ## Installation
@@ -30,6 +32,10 @@ REPO_NAME=your_repository_name
 ```
 
 > Your token needs the `repo` and `project` scopes.
+
+## License
+
+[MIT](LICENSE)
 
 ## Usage
 
