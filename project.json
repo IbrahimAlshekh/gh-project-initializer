@@ -1,116 +1,1680 @@
 {
   "project": {
-    "name": "My SaaS Platform",
-    "description": "A full-stack SaaS application with authentication, billing, and a dashboard.",
-    "version": "1.0.0"
+    "name": "happymom-photography",
+    "description": "Production-ready booking platform for a newborn & maternity photography studio — Laravel 13 Starter Kit (Inertia + React) · Tailwind CSS · MySQL. Clients browse session categories and packages, submit booking inquiries with preferred dates, and track their booking through to gallery delivery. Tickets follow a vertical-slice philosophy: each ticket cuts through database, backend, and frontend so the learner sees a working result after every task.",
+    "tech_stack": ["Laravel 13", "Inertia.js", "React.js", "Tailwind CSS", "MySQL"],
+    "starter_kit_provides": [
+      "Laravel project initialized with Vite",
+      "Inertia.js configured (server + client)",
+      "React.js configured",
+      "Tailwind CSS configured",
+      "User model & migration (name, email, password)",
+      "Full authentication: register, login, logout, forgot/reset password",
+      "Auth controllers & React pages",
+      "GuestLayout & AuthenticatedLayout (base versions)",
+      "HandleInertiaRequests middleware",
+      "CSRF protection",
+      "Profile page (edit name, email, delete account)"
+    ]
   },
   "milestones": [
     {
       "id": "M0",
-      "title": "Foundation & Setup",
-      "description": "Establish the project skeleton, tooling, CI/CD, and core infrastructure."
+      "title": "Foundation — Clean Slate & Project Identity",
+      "description": "Strip the starter kit boilerplate down to a clean canvas, wire up MySQL, brand the app with the studio's warm aesthetic, and set up the three layout shells (public site, client account, admin panel). After this milestone the app carries HappyMom Photography's identity, has a working database, and all three section skeletons are ready to receive features."
     },
     {
       "id": "M1",
-      "title": "Authentication",
-      "description": "Implement full user authentication flow including registration, login, and password reset."
+      "title": "User Roles & Admin Gate",
+      "description": "Extend the starter kit's user system with roles (client/admin), build the admin middleware, seed an admin account, and verify the whole flow end-to-end: register as a client → can't access /admin, log in as admin → lands on the admin dashboard."
     },
     {
       "id": "M2",
-      "title": "Billing & Subscriptions",
-      "description": "Integrate Stripe for subscription management, webhooks, and customer portal."
+      "title": "Session Categories (Full Vertical Slice)",
+      "description": "First real feature built through every layer. The learner creates the session_categories table, model, admin CRUD pages, and public category cards — ending with session types visible on the studio site. Complete Lego piece."
+    },
+    {
+      "id": "M3",
+      "title": "Packages (Full Vertical Slice)",
+      "description": "The core sellable unit. Session packages (e.g. Mini Newborn, Premium Maternity) with pricing, inclusions, and duration. Each ticket is a self-contained slice: create a package → see it in the admin list → see it on the public pricing page → view its detail page with a booking CTA."
+    },
+    {
+      "id": "M4",
+      "title": "Portfolio Gallery (Full Vertical Slice)",
+      "description": "The studio's visual showcase. Admin uploads portfolio images tagged by session category. Public visitors see a filterable gallery that demonstrates the photographer's work and builds trust before booking."
+    },
+    {
+      "id": "M5",
+      "title": "Booking Flow (Full Vertical Slice)",
+      "description": "The primary transaction: a client selects a package, chooses preferred session dates, optionally adds extras, and submits a booking inquiry. After this milestone a client can browse → choose a package → submit a booking → see a confirmation page, and the admin sees the new inquiry in the dashboard."
+    },
+    {
+      "id": "M6",
+      "title": "Client Account Dashboard",
+      "description": "The authenticated client panel: booking list, booking detail with status timeline, and profile management. Each ticket is a standalone page the learner can visit and test immediately after placing a test booking."
+    },
+    {
+      "id": "M7",
+      "title": "Admin: Bookings & Customers",
+      "description": "Admin-side management of booking inquiries (view, confirm date, update status through the full session lifecycle) and clients (list, detail, activate/deactivate). Each ticket produces a working admin page."
+    },
+    {
+      "id": "M8",
+      "title": "Albums, Add-ons & Pricing Page",
+      "description": "Upsell products: physical and digital albums, and individual add-ons (rush editing, extra prints, canvas). Admin manages the catalog; clients can select add-ons when booking. Closes with a comprehensive public pricing page."
+    },
+    {
+      "id": "M9",
+      "title": "Static Pages & Core Content",
+      "description": "Public-facing content pages: Homepage (hero, featured packages, gallery preview, testimonials), About the Studio, Contact form, Services/FAQ. Each ticket is a standalone slice that rounds out the studio's online presence."
+    },
+    {
+      "id": "M10",
+      "title": "Polish, SEO & Security",
+      "description": "Cross-cutting improvements: global toast system, reusable UI components, SEO meta tags, image optimization on upload, security headers, and rate limiting. Each ticket applies retroactively to all earlier features."
+    },
+    {
+      "id": "M11",
+      "title": "Email Notifications",
+      "description": "Transactional emails: booking inquiry confirmation, status updates (confirmed, session complete, gallery ready, cancellation), and welcome email. Each ticket is a standalone mailable the learner can trigger and preview in Mailtrap."
+    },
+    {
+      "id": "M12",
+      "title": "Testing & Deployment",
+      "description": "Automated tests covering auth, packages, booking flow, and authorization, plus the production deploy script. Each ticket is a test suite the learner runs and sees green, or a deployment artifact ready to use."
     }
   ],
   "tickets": [
     {
       "id": "T-001",
-      "title": "Initialize repository and tooling",
-      "description": "Set up the monorepo structure, linters, formatters, and pre-commit hooks to enforce code quality from day one.",
+      "title": "Remove starter kit boilerplate & set project identity",
       "milestone": "M0",
-      "labels": ["setup", "devops"],
+      "labels": ["setup", "foundation"],
+      "priority": "critical",
+      "depends_on": [],
+      "description": "The Laravel starter kit ships with example pages, placeholder content, and demo components. Clean it up and brand it as HappyMom Photography.",
       "tasks": [
-        "Create repository and branch protection rules",
-        "Configure ESLint and Prettier",
-        "Add pre-commit hooks with Husky",
-        "Set up GitHub Actions CI pipeline"
+        "Remove default welcome/dashboard page placeholder content (keep routes, clear component bodies)",
+        "Remove example/demo components that won't be reused",
+        "Clean up `AuthenticatedLayout` — strip demo nav links, keep the shell",
+        "Clean up `GuestLayout` — strip demo content, keep the shell",
+        "Update `app.blade.php` <title> to 'HappyMom Photography'",
+        "Update `.env` → `APP_NAME=\"HappyMom Photography\"`",
+        "Review `resources/js/Pages/` — remove pages that won't be reused as-is",
+        "Keep all auth pages (Login, Register, ForgotPassword, ResetPassword) intact"
       ],
       "acceptance_criteria": [
-        "CI pipeline runs on every pull request",
-        "Pre-commit hooks block commits that fail lint",
-        "README documents how to run the project locally"
+        "App loads with a clean, empty dashboard and homepage",
+        "No placeholder text or demo content remains",
+        "Auth pages still work (login, register, logout, forgot password)",
+        "APP_NAME shows 'HappyMom Photography' in browser tab",
+        "`npm run dev` and `php artisan serve` run without errors"
       ],
       "learning_goals": [
-        "Understand monorepo tooling trade-offs",
-        "Learn GitHub Actions workflow syntax"
+        "Understanding Laravel starter kit structure",
+        "Identifying what to keep vs. remove when starting a new project",
+        "First contact with Inertia page components"
       ]
     },
     {
       "id": "T-002",
-      "title": "Design and implement database schema",
-      "description": "Define the initial PostgreSQL schema for users, teams, and subscriptions using an ORM migration tool.",
+      "title": "Switch from SQLite to MySQL",
       "milestone": "M0",
-      "labels": ["database", "backend"],
+      "labels": ["setup", "database"],
+      "priority": "critical",
+      "depends_on": ["T-001"],
+      "description": "The starter kit defaults to SQLite. Switch to MySQL for production readiness. Create the database, update config, and verify all existing migrations still work.",
       "tasks": [
-        "Choose and install ORM (SQLAlchemy / Prisma)",
-        "Design ERD for users, teams, and subscriptions",
-        "Write and run initial migrations",
-        "Seed database with dev fixtures"
+        "Create MySQL database `happymom_photography`",
+        "Update `.env`: `DB_CONNECTION=mysql`, `DB_DATABASE=happymom_photography`, set DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD",
+        "Run `php artisan migrate` — all starter kit migrations must pass",
+        "Delete the SQLite file if present",
+        "Verify connection with `php artisan db:show`"
       ],
       "acceptance_criteria": [
-        "Migrations run cleanly on a fresh database",
-        "ERD diagram is committed to the repo under /docs",
-        "All tables have created_at and updated_at columns"
+        "`.env` points to MySQL",
+        "All existing migrations (users, sessions, password_reset_tokens, etc.) run on MySQL without errors",
+        "`php artisan db:show` confirms MySQL connection and lists tables",
+        "SQLite file removed from project"
       ],
       "learning_goals": [
-        "Practice schema normalization",
-        "Understand migration rollback strategies"
+        "Laravel database configuration",
+        "Understanding migrations as the source of truth for schema",
+        "Switching database drivers without touching migration files"
       ]
     },
     {
       "id": "T-003",
-      "title": "User registration and login endpoints",
-      "description": "Build REST API endpoints for user registration and JWT-based login, including input validation and password hashing.",
-      "milestone": "M1",
-      "labels": ["backend", "authentication", "security"],
+      "title": "Brand the app: Tailwind theme, fonts & colors",
+      "milestone": "M0",
+      "labels": ["setup", "frontend", "design"],
+      "priority": "high",
+      "depends_on": ["T-001"],
+      "description": "Customize the Tailwind config for HappyMom Photography's brand identity — soft, warm, and emotive. This is the visual foundation everything else builds on.",
       "tasks": [
-        "POST /auth/register — validate input, hash password, create user",
-        "POST /auth/login — verify credentials, return JWT + refresh token",
-        "Implement token refresh endpoint",
-        "Add rate limiting to auth routes"
+        "Define brand color palette in `tailwind.config.js`: blush rose as primary, warm cream as background, soft gold as accent, deep charcoal as text",
+        "Configure typography: serif font for headings (e.g., Cormorant Garamond or Playfair Display), sans-serif for body (e.g., Lato or Inter)",
+        "Import Google Fonts in `app.blade.php` or via CSS `@import`",
+        "Update `app.css` with base styles (body font, default text color, smooth scrolling, link hover transitions)",
+        "Test by adding a sample heading + paragraph to the dashboard to verify fonts and colors render"
       ],
       "acceptance_criteria": [
-        "Passwords are hashed with bcrypt (cost factor >= 12)",
-        "JWT expires in 15 minutes; refresh token in 7 days",
-        "Returns 429 after 10 failed login attempts per IP",
-        "All endpoints have integration tests"
+        "Brand colors available as Tailwind classes (e.g., `bg-brand-blush`, `text-brand-gold`)",
+        "Serif heading font and sans-serif body font render correctly in the browser",
+        "Existing auth pages inherit the new theme automatically",
+        "No visual regressions on starter kit pages"
       ],
       "learning_goals": [
-        "Understand JWT vs session-based auth",
-        "Learn secure password storage best practices"
+        "Tailwind CSS configuration and design tokens",
+        "Google Fonts integration in Laravel/Vite projects",
+        "Building a cohesive brand palette as a shared foundation"
       ]
     },
     {
       "id": "T-004",
-      "title": "Stripe subscription checkout flow",
-      "description": "Implement a Stripe Checkout session for new subscribers, handle the success/cancel redirects, and store subscription state in the database.",
-      "milestone": "M2",
-      "labels": ["billing", "backend", "stripe"],
+      "title": "Set up route structure & admin route file",
+      "milestone": "M0",
+      "labels": ["setup", "backend"],
+      "priority": "high",
+      "depends_on": ["T-001"],
+      "description": "Organize routes into three clear groups: public studio pages, client account, and admin panel. Add the admin route group alongside the starter kit's existing route files.",
       "tasks": [
-        "Install and configure Stripe SDK",
-        "Create endpoint to initiate Checkout session",
-        "Handle checkout.session.completed webhook event",
-        "Store subscription ID and status on the user record",
-        "Display current plan on the account settings page"
+        "Create `routes/admin.php`",
+        "Register it in `bootstrap/app.php` with `prefix('admin')` and middleware `['auth']` (admin middleware added in M1)",
+        "Add a placeholder admin dashboard route: `GET /admin` → returns a simple Inertia page",
+        "Verify `web.php` serves public routes and `auth.php` is untouched",
+        "Run `php artisan route:list` to confirm route grouping"
       ],
       "acceptance_criteria": [
-        "Users can complete a checkout and gain access immediately",
-        "Webhook signature is validated before processing",
-        "Failed payments transition subscription to past_due status",
-        "Stripe Customer Portal link is available on account settings"
+        "`routes/admin.php` exists and is loaded with `/admin` prefix",
+        "`php artisan route:list` shows admin routes grouped under `/admin`",
+        "Placeholder `/admin` page renders for authenticated users",
+        "Public routes accessible without auth",
+        "Auth routes untouched and still working"
       ],
       "learning_goals": [
-        "Understand Stripe's payment lifecycle",
-        "Learn idempotent webhook handling patterns"
+        "Laravel routing: route groups, prefixes, and multiple route files",
+        "Middleware basics and where to apply it",
+        "Using `php artisan route:list` to debug route registration"
+      ]
+    },
+    {
+      "id": "T-005",
+      "title": "Create AdminLayout with sidebar and render admin dashboard",
+      "milestone": "M0",
+      "labels": ["frontend", "fullstack"],
+      "priority": "high",
+      "depends_on": ["T-003", "T-004"],
+      "description": "Build the AdminLayout component and wire it to the admin dashboard route. After this ticket, navigating to /admin shows a branded admin shell with a sidebar — the first visible result of the admin section.",
+      "tasks": [
+        "Create `resources/js/Layouts/AdminLayout.jsx` with sidebar + top bar + main content area",
+        "Sidebar placeholder links: Dashboard, Bookings, Packages, Categories, Gallery, Albums, Add-ons, Customers, Messages",
+        "Top bar: admin user name (from Inertia shared props via `usePage`) + logout button",
+        "Make sidebar responsive (collapsible hamburger menu on mobile)",
+        "Create `resources/js/Pages/Admin/Dashboard.jsx` — simple page with 'Admin Dashboard' heading wrapped in AdminLayout",
+        "Wire the `/admin` route to this page via a controller or closure"
+      ],
+      "acceptance_criteria": [
+        "Navigating to `/admin` (authenticated) shows the AdminLayout with sidebar",
+        "All sidebar links are visible (even if destination pages don't exist yet)",
+        "Top bar shows the admin user's name and a working logout button",
+        "Responsive: sidebar collapses on mobile via hamburger",
+        "AdminLayout is visually distinct from AuthenticatedLayout"
+      ],
+      "learning_goals": [
+        "React layout components and composition",
+        "Inertia shared props with `usePage()`",
+        "Responsive sidebar pattern with Tailwind",
+        "Separating admin and public layout concerns"
+      ]
+    },
+    {
+      "id": "T-006",
+      "title": "Extend GuestLayout into a studio website shell with navbar & footer",
+      "milestone": "M0",
+      "labels": ["frontend", "fullstack"],
+      "priority": "high",
+      "depends_on": ["T-003"],
+      "description": "The starter kit's GuestLayout is a minimal centered card for auth forms. Extend it into a full photography studio site layout with navbar and footer, while keeping auth pages looking correct.",
+      "tasks": [
+        "Add a public navbar: studio logo/wordmark ('HappyMom Photography'), nav links (Home, Portfolio, Packages, About, Contact), auth links (Login / Book Now or user dropdown when logged in)",
+        "Make navbar sticky on scroll and responsive (hamburger on mobile)",
+        "Add a footer: studio tagline, quick links (Portfolio, Packages, About, Contact), social media icons (Instagram, Facebook), copyright with dynamic year",
+        "Auth pages should still render as a centered card within this layout — use a `variant` prop or a separate AuthLayout to differentiate",
+        "Create or update the homepage route (`/`) to render a simple placeholder page using this layout"
+      ],
+      "acceptance_criteria": [
+        "GuestLayout renders navbar + footer on all public pages",
+        "Auth pages (login, register) still display as centered form cards",
+        "Navbar is responsive with hamburger on mobile",
+        "Homepage placeholder renders at `/` with full layout",
+        "Footer shows dynamic current year"
+      ],
+      "learning_goals": [
+        "Extending existing layout components without breaking them",
+        "React props for layout variants",
+        "Responsive sticky navigation with Tailwind",
+        "Thinking ahead about layout variants (public vs auth)"
+      ]
+    },
+    {
+      "id": "T-007",
+      "title": "Set up Git repo, branching strategy & push to GitHub",
+      "milestone": "M0",
+      "labels": ["setup", "devops"],
+      "priority": "high",
+      "depends_on": ["T-001"],
+      "description": "Initialize version control and establish the workflow the learner will use for every future ticket.",
+      "tasks": [
+        "Initialize Git repo (if not already done by starter kit)",
+        "Verify `.gitignore` covers `vendor/`, `node_modules/`, `.env`, `storage/*.key`",
+        "Create GitHub repo `happymom-photography` with a README describing the project",
+        "Push initial commit (cleaned-up starter kit)",
+        "Create `develop` branch from `main`",
+        "Set up branch protection on `main` (require PR before merging)",
+        "Document branching convention in README: `main`, `develop`, `feature/T-XXX-short-description`"
+      ],
+      "acceptance_criteria": [
+        "GitHub repo exists with the clean starter kit pushed",
+        "`.gitignore` prevents committing sensitive or generated files",
+        "Branch protection enabled on `main`",
+        "README documents the branching convention",
+        "`develop` branch exists"
+      ],
+      "learning_goals": [
+        "Git workflow and branch protection rules",
+        "GitHub repository setup",
+        "Professional branching strategy for solo and team projects"
+      ]
+    },
+    {
+      "id": "T-008",
+      "title": "Add roles to users: migration, model update, admin seeder — verify in browser",
+      "milestone": "M1",
+      "labels": ["fullstack", "database", "backend"],
+      "priority": "critical",
+      "depends_on": ["T-002", "T-005"],
+      "description": "Extend the existing user system with roles. One ticket, full stack, working result: write the migration, update the model, seed an admin user, log in as admin, and see the admin dashboard.",
+      "tasks": [
+        "Create a NEW migration (never modify the starter kit's original): add `phone` (nullable string), `role` (enum: client/admin, default client), `is_active` (boolean, default true) to `users` table",
+        "Update `User` model: add fields to `$fillable`, add `$casts` for `is_active` (boolean)",
+        "Add helper methods to User: `isAdmin()`, `isClient()`, `scopeActive()`",
+        "Create `database/seeders/AdminUserSeeder.php`: create admin user (email: `admin@happymom-photography.com`, password: `password`, role: `admin`) using `firstOrCreate`",
+        "Register seeder in `DatabaseSeeder.php`",
+        "Run `php artisan migrate && php artisan db:seed`",
+        "Log in as admin in the browser — should reach the admin dashboard"
+      ],
+      "acceptance_criteria": [
+        "Migration runs on top of existing users table without errors",
+        "`$user->isAdmin()` returns true for admin role",
+        "`$user->isClient()` returns true for client role",
+        "`User::active()->get()` filters out inactive users",
+        "Admin user seeded and can log in",
+        "Seeder is idempotent (safe to run multiple times with no duplicates)",
+        "Admin sees the `/admin` dashboard after login"
+      ],
+      "learning_goals": [
+        "Laravel migrations to alter existing tables without touching originals",
+        "Eloquent model customization: fillable, casts, scopes, helpers",
+        "Database seeders and idempotency with firstOrCreate",
+        "Enum columns in MySQL"
+      ]
+    },
+    {
+      "id": "T-009",
+      "title": "Admin middleware & role-based login redirect — full protection working",
+      "milestone": "M1",
+      "labels": ["backend", "fullstack"],
+      "priority": "critical",
+      "depends_on": ["T-008"],
+      "description": "Build the admin gate and make login smarter. After this ticket: clients can't access /admin (403), admins land on /admin after login, clients land on the homepage. Testable immediately in the browser.",
+      "tasks": [
+        "Create `app/Http/Middleware/EnsureUserIsAdmin.php` — check `$user->isAdmin()`, abort 403 if not",
+        "Register middleware alias `admin` in `bootstrap/app.php`",
+        "Apply `admin` middleware to all routes in `routes/admin.php`",
+        "Modify post-login redirect: if admin → `/admin`, if client → `/`",
+        "Test: register a new client account → try to visit `/admin` → get 403",
+        "Test: log in as admin → land on `/admin` dashboard"
+      ],
+      "acceptance_criteria": [
+        "Non-admin users get 403 on all `/admin/*` routes",
+        "Admin users pass through the middleware without issue",
+        "Admin login → redirects to `/admin`",
+        "Client login → redirects to `/` (homepage)",
+        "Unauthenticated users → redirected to login page",
+        "Intended URL still works: accessing /admin while logged out → login → /admin"
+      ],
+      "learning_goals": [
+        "Laravel middleware creation and registration",
+        "Route middleware groups and aliases",
+        "Authentication redirects based on user role",
+        "HTTP 403 responses"
+      ]
+    },
+    {
+      "id": "T-010",
+      "title": "Restyle auth pages & add phone to registration — branded auth flow",
+      "milestone": "M1",
+      "labels": ["frontend", "fullstack"],
+      "priority": "medium",
+      "depends_on": ["T-003", "T-008"],
+      "description": "Restyle all four auth pages to match the HappyMom Photography brand and add a phone field to registration. After this ticket: the auth flow looks professional and captures phone numbers for booking contact.",
+      "tasks": [
+        "Restyle Login page: brand colors, studio logo/wordmark above the form, styled inputs and buttons, soft background",
+        "Restyle Register page: same brand treatment, add optional phone input field",
+        "Restyle Forgot Password and Reset Password pages: consistent brand styling",
+        "Backend: add `phone` to registration validation rules (nullable, string) and `User::create()` call",
+        "Test: register with phone → saved to DB. Register without phone → still works",
+        "Test: all four auth pages are responsive on mobile"
+      ],
+      "acceptance_criteria": [
+        "All four auth pages visually match the HappyMom Photography brand",
+        "Studio logo/wordmark displays on all auth pages",
+        "Phone field is optional on registration and saved to DB when provided",
+        "No functional regressions (all auth flows work as before)",
+        "Forms are responsive and accessible"
+      ],
+      "learning_goals": [
+        "Styling Inertia/React pages with Tailwind CSS",
+        "Modifying starter kit auth controllers safely",
+        "Form validation rules in Laravel (nullable fields)",
+        "Extending existing registration forms"
+      ]
+    },
+    {
+      "id": "T-011",
+      "title": "Move profile page to /account/profile & add phone field",
+      "milestone": "M1",
+      "labels": ["fullstack"],
+      "priority": "medium",
+      "depends_on": ["T-008", "T-010"],
+      "description": "Customize the starter kit's profile page: move it to the client panel URL, add the phone field, and restyle. After this ticket: clients can edit their profile including phone at /account/profile.",
+      "tasks": [
+        "Update route: change `/profile` to `/account/profile`",
+        "Add phone field to the profile edit form (frontend)",
+        "Update the profile controller to validate and save phone",
+        "Restyle the page to match the studio brand",
+        "Remove or redirect the old `/profile` route",
+        "Test: edit name, email, phone → all saved. Delete account → still works"
+      ],
+      "acceptance_criteria": [
+        "Profile page accessible at `/account/profile`",
+        "Phone field editable and saved to DB",
+        "Brand styling applied consistently",
+        "Delete account functionality still works",
+        "Old `/profile` route no longer accessible (redirects or 404)"
+      ],
+      "learning_goals": [
+        "Modifying starter kit routes without breaking auth flows",
+        "Extending existing controllers",
+        "Route naming conventions for user panels"
+      ]
+    },
+    {
+      "id": "T-012",
+      "title": "Session categories: migration + model + admin create form + admin list page",
+      "milestone": "M2",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "critical",
+      "depends_on": ["T-005", "T-009"],
+      "description": "First real feature vertical slice! Build the session_categories table, model, admin create form, and admin list page in ONE ticket. After this ticket: the admin can create a session category (e.g. 'Newborn', 'Maternity') via a form and see it in a table.",
+      "tasks": [
+        "Create `session_categories` migration: id, name, slug (unique), description (nullable), cover_image (nullable), is_active (boolean default true), sort_order (integer default 0), timestamps",
+        "Create `SessionCategory` model: fillable, slug auto-generation from name (boot method), `scopeActive()`, `packages()` hasMany placeholder",
+        "Configure storage: run `php artisan storage:link`, create `storage/app/public/categories/` directory",
+        "Create `AdminCategoryController` with `index`, `create`, and `store` methods",
+        "Create React page `Admin/Categories/Index.jsx` — table: name, slug, active badge, sort order, actions. Use AdminLayout",
+        "Create React page `Admin/Categories/Create.jsx` — form: name, description, cover image upload, is_active toggle, sort order. Use Inertia `useForm`",
+        "Add routes in `routes/admin.php`: GET `/admin/categories`, GET `/admin/categories/create`, POST `/admin/categories`",
+        "Wire flash message for success feedback after creation",
+        "Run migration, create a category via the form, see it in the list"
+      ],
+      "acceptance_criteria": [
+        "Migration runs, `session_categories` table exists in MySQL",
+        "Slug auto-generates from name (e.g., 'Newborn Sessions' → 'newborn-sessions')",
+        "Admin can fill the create form and submit",
+        "Validation: name required, slug unique",
+        "Cover image uploads to `storage/app/public/categories/`",
+        "After creation, admin redirected to list page with success flash",
+        "List page shows all categories in a table with active/inactive badges",
+        "Non-admin users get 403"
+      ],
+      "learning_goals": [
+        "Full vertical slice: migration → model → controller → React pages",
+        "Eloquent model with auto-slug boot methods",
+        "Inertia useForm hook for form state and submission",
+        "File upload handling in Laravel",
+        "Flash messages with Inertia"
+      ]
+    },
+    {
+      "id": "T-013",
+      "title": "Session categories: edit, update & delete",
+      "milestone": "M2",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-012"],
+      "description": "Complete the session category CRUD. After this ticket: admin can edit any category's details, replace its cover image, and delete categories that have no packages attached.",
+      "tasks": [
+        "Add `edit` and `update` methods to `AdminCategoryController`",
+        "Add `destroy` method — only allow deletion if the category has no packages (check relationship count)",
+        "Create React page `Admin/Categories/Edit.jsx` — pre-populated form, show current cover image with option to replace it",
+        "Add routes: GET `/admin/categories/{category}/edit`, PUT `/admin/categories/{category}`, DELETE `/admin/categories/{category}`",
+        "Add edit/delete action buttons to the categories list page",
+        "Add a confirmation modal before delete",
+        "Test: edit a category → changes saved. Delete empty category → removed. Delete category with packages → error message shown"
+      ],
+      "acceptance_criteria": [
+        "Edit form loads with all existing data pre-populated",
+        "Cover image can be replaced or kept unchanged",
+        "Validation errors display inline",
+        "Category with packages cannot be deleted (error message shown)",
+        "Empty category deletes successfully after confirmation",
+        "Flash messages for success and error states"
+      ],
+      "learning_goals": [
+        "Edit forms with Inertia (pre-populated data)",
+        "PUT requests via Inertia",
+        "Conditional deletion logic using relationship count",
+        "Confirmation modals in React"
+      ]
+    },
+    {
+      "id": "T-014",
+      "title": "Category seeder & public category showcase",
+      "milestone": "M2",
+      "labels": ["fullstack", "database", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-006", "T-012"],
+      "description": "Seed realistic session categories and display them on the public studio site. After this ticket: an 'Our Sessions' section appears on the homepage and /portfolio/{slug} shows the category landing page.",
+      "tasks": [
+        "Create `SessionCategorySeeder`: seed 5 categories — Newborn, Maternity, Sitter & Cake Smash, Family Portraits, Motherhood — with descriptions and photography-appropriate slugs",
+        "Run `php artisan db:seed` to populate categories",
+        "Create `CategoryController@show` — find by slug, pass to Inertia page, abort 404 if inactive/missing",
+        "Create React page `Portfolio/Category.jsx` — shows category name, description, cover image header, and a placeholder for the gallery grid (empty for now). Use GuestLayout",
+        "Add route: GET `/portfolio/{slug}`",
+        "Update the homepage placeholder: add an 'Our Sessions' section showing the 5 category cards (cover image, name, short description, link to category page)",
+        "Create `HomeController@index` — pass active categories to the homepage",
+        "Test: visit homepage → see category cards → click one → land on the category page"
+      ],
+      "acceptance_criteria": [
+        "5 session categories seeded with realistic photography descriptions",
+        "Homepage 'Our Sessions' section shows category cards",
+        "Clicking a card navigates to `/portfolio/{slug}`",
+        "Category page shows name, description, and cover image header",
+        "404 returned for invalid or inactive category slugs",
+        "Seeder is idempotent"
+      ],
+      "learning_goals": [
+        "Factories and seeders with realistic domain data",
+        "Public controllers vs. admin controllers",
+        "Route model binding with custom slugs",
+        "Linking seeded DB data to the frontend display"
+      ]
+    },
+    {
+      "id": "T-015",
+      "title": "Packages: migration + model + admin create form (all fields) + admin list page",
+      "milestone": "M3",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "critical",
+      "depends_on": ["T-012"],
+      "description": "The core sellable unit. Create the packages table, model, and admin interface to create and list packages. After this ticket: admin can create a package (e.g. 'Mini Newborn Session — €250') with all details and see it in a paginated list.",
+      "tasks": [
+        "Create `packages` migration: id, session_category_id (FK), name, slug (unique), tagline (nullable string), description (text), price (decimal 10,2), duration_minutes (integer), photo_count (integer), outfit_changes (integer default 0), inclusions (JSON — array of strings), is_active (boolean default true), is_featured (boolean default false), sort_order (integer default 0), timestamps, soft_deletes",
+        "Create `Package` model: fillable, casts (price as decimal, inclusions as array, booleans), `sessionCategory()` belongsTo, scopes: `active()`, `featured()`, `formattedPrice` accessor returning '€XX', SoftDeletes trait",
+        "Create `AdminPackageController` with `index`, `create`, and `store` methods",
+        "Create React page `Admin/Packages/Index.jsx` — table: name, category, price, duration, featured badge, status badge, actions. Pagination (15/page). Category filter dropdown",
+        "Create React page `Admin/Packages/Create.jsx` — form: name, category dropdown, tagline, description, price, duration (minutes), photo count, outfit changes, inclusions (dynamic add/remove list), is_active toggle, is_featured toggle, sort order",
+        "Add routes: GET `/admin/packages`, GET `/admin/packages/create`, POST `/admin/packages`",
+        "Run migration, create a package via the form, see it in the admin list"
+      ],
+      "acceptance_criteria": [
+        "Packages table created with correct FK to session_categories and soft_deletes",
+        "Package model has working scopes, casts, and relationships",
+        "Admin can fill the full create form including dynamic inclusions list",
+        "Validation: name, category, price, duration, photo_count required",
+        "Inclusions stored and retrieved as a JSON array",
+        "Slug auto-generates from name",
+        "Package list paginated with category filter working",
+        "Non-admin users get 403"
+      ],
+      "learning_goals": [
+        "Complex migration with JSON column type",
+        "Eloquent model casts for arrays and decimals",
+        "Dynamic list inputs in React (add/remove inclusions)",
+        "Server-side filtering and pagination with Inertia"
+      ]
+    },
+    {
+      "id": "T-016",
+      "title": "Packages: edit form + soft delete",
+      "milestone": "M3",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-015"],
+      "description": "Complete package management. After this ticket: admin can edit any package (all fields including the dynamic inclusions list) and soft-delete packages.",
+      "tasks": [
+        "Add `edit`, `update`, and `destroy` methods to `AdminPackageController`",
+        "Create React page `Admin/Packages/Edit.jsx` — pre-populated form with all fields; inclusions list pre-loaded and editable",
+        "Soft delete: confirmation modal, package disappears from list but stays in DB with deleted_at",
+        "Add routes: GET `/admin/packages/{package}/edit`, PUT `/admin/packages/{package}`, DELETE `/admin/packages/{package}`",
+        "Add edit/delete action buttons to the packages list page",
+        "Test: edit a package → all changes saved including modified inclusions. Delete → soft-deleted and gone from list"
+      ],
+      "acceptance_criteria": [
+        "Edit form loads with all fields pre-populated including the inclusions JSON array",
+        "Inclusions can be added, edited, and removed in the edit form",
+        "All fields update correctly on save",
+        "Soft-deleted packages disappear from the admin list",
+        "Confirmation modal appears before deletion",
+        "Validation errors display inline"
+      ],
+      "learning_goals": [
+        "Editing JSON array fields via dynamic React inputs",
+        "Soft deletes in Laravel (SoftDeletes trait, deleted_at)",
+        "PUT requests with complex nested payloads",
+        "Pre-populating dynamic list components from DB data"
+      ]
+    },
+    {
+      "id": "T-017",
+      "title": "Package seeder & factory with realistic photography data",
+      "milestone": "M3",
+      "labels": ["database", "backend"],
+      "priority": "high",
+      "depends_on": ["T-014", "T-015"],
+      "description": "Seed the packages with realistic data so all subsequent public-facing tickets have content to display.",
+      "tasks": [
+        "Create `PackageFactory` with realistic photography data: names like 'Mini Newborn Session', 'Premium Maternity', 'Sitter Deluxe'; prices €150–€600; durations 60–240 minutes; photo counts 10–60",
+        "Inclusions should reflect real photography packages (e.g., 'Online gallery of 25 edited images', '2 outfit changes', 'Prop styling included', 'Full print release')",
+        "Create `PackageSeeder`: 2–3 packages per session category, 2–3 marked as featured",
+        "Update `DatabaseSeeder` to run category seeder then package seeder",
+        "Run `php artisan migrate:fresh --seed` — full catalog populated",
+        "Verify in admin panel: packages visible with correct categories and inclusions"
+      ],
+      "acceptance_criteria": [
+        "`php artisan db:seed` populates 10–15 packages across 5 session categories",
+        "2–3 packages marked as featured",
+        "Each package has a realistic inclusions list (3–6 items)",
+        "Packages are visible and correct in the admin packages list",
+        "Seeder runs cleanly after `migrate:fresh`"
+      ],
+      "learning_goals": [
+        "Laravel factories with realistic domain data",
+        "Factory relationships (package belongs to category)",
+        "Seeder ordering and dependencies",
+        "Database refresh workflow for development"
+      ]
+    },
+    {
+      "id": "T-018",
+      "title": "Admin dashboard with real stats from DB",
+      "milestone": "M3",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-017"],
+      "description": "Make the admin dashboard useful. After this ticket: the admin dashboard shows real counts — total packages, session categories, registered clients — pulled from the database.",
+      "tasks": [
+        "Create `AdminDashboardController@index` — query: total packages, total categories, total clients, pending inquiries (0 placeholder for now), upcoming confirmed sessions (0 placeholder for now)",
+        "Update `Admin/Dashboard.jsx` — render 5 stat cards with icons and real counts",
+        "Use efficient queries (no N+1, use aggregate counts)",
+        "Update admin sidebar: highlight 'Dashboard' as active when on `/admin`",
+        "Test: visit `/admin` → see real counts matching seeded data"
+      ],
+      "acceptance_criteria": [
+        "Dashboard shows accurate counts from DB",
+        "Stat cards are styled with icons and visually clear",
+        "Page loads efficiently with minimal DB queries",
+        "Dashboard link highlighted in sidebar when active"
+      ],
+      "learning_goals": [
+        "Aggregate queries: COUNT with Eloquent",
+        "Passing computed data via Inertia props",
+        "Dashboard stat card UI pattern",
+        "Query efficiency awareness"
+      ]
+    },
+    {
+      "id": "T-019",
+      "title": "Portfolio gallery: migration + model + admin image upload + admin list",
+      "milestone": "M4",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "critical",
+      "depends_on": ["T-005", "T-009"],
+      "description": "Build the portfolio gallery management. After this ticket: the admin can upload portfolio images, tag them by session category, and see them in a grid. This is the studio's primary trust-building asset.",
+      "tasks": [
+        "Create `gallery_images` migration: id, session_category_id (nullable FK), title (nullable), image_path, alt_text (nullable), caption (nullable), is_featured (boolean default false), sort_order (integer default 0), timestamps",
+        "Create `GalleryImage` model: fillable, `sessionCategory()` belongsTo (nullable), `scopeFeatured()`, `scopeByCategory($id)`, `url` accessor via `Storage::url()`",
+        "Create `AdminGalleryController` with `index`, `create`, and `store` methods. Support multi-file upload (upload multiple images at once)",
+        "Create React page `Admin/Gallery/Index.jsx` — image thumbnail grid with category badge, featured star toggle, delete button. Category filter at top. AdminLayout",
+        "Create React page `Admin/Gallery/Create.jsx` — multi-file input (drag-and-drop preferred), category dropdown, alt text, caption, featured toggle",
+        "Add routes: GET `/admin/gallery`, GET `/admin/gallery/create`, POST `/admin/gallery`",
+        "Run migration, upload a batch of images, verify they appear in the admin grid"
+      ],
+      "acceptance_criteria": [
+        "Migration runs, `gallery_images` table created",
+        "Admin can upload multiple images in one submission",
+        "Images stored in `storage/app/public/gallery/`",
+        "Admin grid shows thumbnails with category badges",
+        "Category filter narrows the grid correctly",
+        "Non-admin users get 403"
+      ],
+      "learning_goals": [
+        "Multi-file upload in Laravel",
+        "Nullable foreign keys and optional relationships",
+        "Image grid admin UI with filter",
+        "Drag-and-drop file input in React"
+      ]
+    },
+    {
+      "id": "T-020",
+      "title": "Portfolio gallery: public page with category filter",
+      "milestone": "M4",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-014", "T-019"],
+      "description": "Build the public portfolio page. After this ticket: visitors can browse the studio's full portfolio in a beautiful grid and filter by session type.",
+      "tasks": [
+        "Create `GalleryController@index` — return active gallery images with eager-loaded categories, optionally filtered by category slug from query param",
+        "Create React page `Portfolio/Index.jsx` — responsive image grid, category filter tabs at top (All, Newborn, Maternity, etc.), image hover overlay with caption. Use GuestLayout",
+        "Clicking a filter tab triggers an Inertia visit with `?category=slug`, preserving scroll position",
+        "Add route: GET `/portfolio`",
+        "Update navbar: 'Portfolio' link points to `/portfolio`",
+        "Update `Portfolio/Category.jsx` (from T-014): replace the placeholder with the real gallery grid filtered to this category",
+        "Test: visit `/portfolio` → see all images. Click 'Newborn' → only newborn images. Click 'All' → all images return"
+      ],
+      "acceptance_criteria": [
+        "Portfolio page shows all gallery images in a responsive grid",
+        "Category filter tabs update the URL and filter results",
+        "Active filter tab is highlighted visually",
+        "Only active categories shown in filter tabs",
+        "Images show hover overlay with caption or category name",
+        "Category page (from T-014) now shows real gallery images"
+      ],
+      "learning_goals": [
+        "Responsive image grid with Tailwind CSS",
+        "Filter tabs with Inertia router.visit and query params",
+        "Hover effects in React/CSS",
+        "Reusing a page across two different routes"
+      ]
+    },
+    {
+      "id": "T-021",
+      "title": "Package detail page: gallery preview, inclusions, and booking CTA",
+      "milestone": "M4",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-015", "T-019"],
+      "description": "Build the single package detail page. After this ticket: clicking a package leads to a full detail page with inclusions checklist, sample gallery images from the same category, and a 'Book This Session' CTA.",
+      "tasks": [
+        "Create `PackageController@show` — find by slug, eager-load sessionCategory with up to 6 featured gallery images. Abort 404 if inactive/missing",
+        "Create React page `Packages/Show.jsx`: hero with package name + tagline, price prominently displayed, duration and photo count at a glance, full description, inclusions as a checklist, sample gallery grid (6 images from same category), 'Book This Session' CTA button (placeholder for now), 3 related packages from same category. Use GuestLayout",
+        "Add SEO meta tags via Inertia `<Head>`: dynamic title and description",
+        "Add route: GET `/packages/{slug}`",
+        "Test: click a package → detail page loads with all info. Gallery shows images from same category. Invalid slug → 404"
+      ],
+      "acceptance_criteria": [
+        "Package detail page renders all fields with inclusions as a checklist",
+        "Duration formatted as hours (e.g., '2 hours')",
+        "Price formatted with € symbol",
+        "Sample gallery shows up to 6 images from the same session category",
+        "3 related packages shown from same category",
+        "SEO title and description set dynamically",
+        "404 for inactive or non-existent packages"
+      ],
+      "learning_goals": [
+        "Route model binding with slug columns",
+        "Eager loading nested relationships (category → gallery images)",
+        "Inclusions checklist UI",
+        "SEO with Inertia Head component"
+      ]
+    },
+    {
+      "id": "T-022",
+      "title": "Booking inquiry: tables + models + service + form + confirmation (full vertical slice)",
+      "milestone": "M5",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "critical",
+      "depends_on": ["T-021"],
+      "description": "The primary transaction of the app. Build the entire booking inquiry flow in ONE ticket. After this ticket: a logged-in client selects a package, fills in session details, submits the booking, and lands on a confirmation page. The admin dashboard pending count increments.",
+      "tasks": [
+        "Create `bookings` migration: id, user_id (FK), package_id (FK), booking_number (unique), status (enum: inquiry/confirmed/session_completed/editing/gallery_ready/cancelled, default inquiry), preferred_date_1 (date), preferred_date_2 (date nullable), confirmed_date (date nullable), session_location (string nullable), baby_due_date (date nullable), baby_birth_date (date nullable), special_requests (text nullable), subtotal (decimal 10,2), total (decimal 10,2), admin_notes (text nullable), timestamps",
+        "Create `Booking` model: fillable, casts (dates, decimals), `user()` belongsTo, `package()` belongsTo, status helpers (`isInquiry()`, `isConfirmed()`, etc.), static `generateBookingNumber()` (e.g., HMP-20260001), `formattedTotal` accessor",
+        "Create `BookingService@createBooking(user, package, data)`: DB transaction → generate booking number → create booking with total copied from package price → return booking",
+        "Create `BookingController`: `create` (show form, auth required, pass package via `?package={slug}` query param), `store` (validate and call service)",
+        "Create React page `Bookings/Create.jsx`: package summary card at top (name, price, inclusions at a glance), form fields: preferred date 1 (date picker, required, future dates only), preferred date 2 (optional), baby due date (if applicable), baby birth date (if applicable), session location preference, special requests (textarea). 'Submit Inquiry' button",
+        "Create React page `Bookings/Confirmation.jsx`: thank-you message, booking number, package name, preferred dates, 'View My Bookings' and 'Return to Homepage' links",
+        "Add routes: GET `/bookings/create`, POST `/bookings`, GET `/bookings/{booking}/confirmation`",
+        "Wire the 'Book This Session' CTA on the package detail page to `/bookings/create?package={slug}`",
+        "Redirect unauthenticated users to login, then back to the booking form",
+        "Update `AdminDashboardController` so the pending inquiries count is now live"
+      ],
+      "acceptance_criteria": [
+        "Bookings table created with all fields and correct MySQL types",
+        "Booking form pre-loads the selected package details from the query param",
+        "Validation: preferred_date_1 required and must be a future date",
+        "Submitting creates a booking in DB with status 'inquiry' and unique HMP-XXXXXXXX number",
+        "Total copied from package price at time of booking",
+        "Confirmation page shows booking number and summary",
+        "Unauthenticated users redirected to login then back to form",
+        "DB transaction: booking either fully created or not at all",
+        "Admin dashboard pending count now reflects real data"
+      ],
+      "learning_goals": [
+        "Full vertical slice across all layers in one ticket",
+        "Service pattern for isolating business logic",
+        "Date picker with future-date validation",
+        "DB transactions for data integrity",
+        "Booking/order number generation pattern",
+        "Redirecting guests to login and back (intended URL)"
+      ]
+    },
+    {
+      "id": "T-023",
+      "title": "Add-ons selection in the booking inquiry form",
+      "milestone": "M5",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "medium",
+      "depends_on": ["T-022", "T-032"],
+      "description": "Extend the booking inquiry form to include optional add-on selection. After this ticket: clients can add extras (rush editing, canvas print, etc.) before submitting their inquiry.",
+      "tasks": [
+        "Create `booking_addons` migration: id, booking_id (FK cascade), addon_id (FK), quantity (integer default 1), unit_price (decimal 10,2), line_total (decimal 10,2), timestamps",
+        "Create `BookingAddon` model: `booking()` belongsTo, `addon()` belongsTo",
+        "Add `addons()` hasMany to `Booking` model",
+        "Update `BookingController@create`: pass active add-ons to the page",
+        "Update `Bookings/Create.jsx`: add 'Optional Add-ons' section — checkbox cards for each add-on (name, description, price). Running total preview updates as add-ons are selected",
+        "Update `BookingService@createBooking`: create booking_addons records, recalculate total (package price + selected add-ons)",
+        "Update `Bookings/Confirmation.jsx`: list selected add-ons and the updated total",
+        "Test: book with add-ons → total includes them. Book without → still works"
+      ],
+      "acceptance_criteria": [
+        "`booking_addons` table created with cascade delete from bookings",
+        "Add-ons section visible on booking form with checkbox cards",
+        "Running total updates dynamically as add-ons are selected/deselected",
+        "Total saved correctly: package price + selected add-ons",
+        "BookingAddon records store price snapshot at time of booking",
+        "Confirmation page lists selected add-ons"
+      ],
+      "learning_goals": [
+        "Extending an existing form without breaking it",
+        "Price snapshot pattern (why you store price at booking time)",
+        "Checkbox card UI component",
+        "Dynamic total calculation in React"
+      ]
+    },
+    {
+      "id": "T-024",
+      "title": "Customer dashboard: account overview with upcoming bookings",
+      "milestone": "M6",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-011", "T-022"],
+      "description": "Build the client account dashboard. After this ticket: logged-in clients see their account overview with upcoming bookings and quick stats at /account.",
+      "tasks": [
+        "Create `AccountController@index` — pass: user info, upcoming bookings (confirmed date in future or all recent, limit 3, with package name), total bookings count, pending inquiry count",
+        "Create React page `Account/Dashboard.jsx`: welcome message with client's first name, summary stats (total bookings, pending inquiries), upcoming sessions table (package name, confirmed date or 'Pending', status badge, 'View' link), quick links (My Bookings, Profile). Use AuthenticatedLayout",
+        "Build a sidebar/tab sub-navigation for the client panel: Dashboard, My Bookings, Profile. Sidebar on desktop, tabs on mobile. Highlight active route",
+        "Add route: GET `/account`",
+        "Test: log in as client → visit `/account` → see dashboard with booking data"
+      ],
+      "acceptance_criteria": [
+        "Dashboard shows welcome message with client's first name",
+        "Recent/upcoming bookings (limit 3) shown with status badges",
+        "Summary stats are accurate",
+        "Client sub-navigation present and highlights 'Dashboard'",
+        "Only authenticated clients can access",
+        "Responsive: sidebar on desktop, tabs on mobile"
+      ],
+      "learning_goals": [
+        "Customer dashboard layout and information architecture",
+        "Sub-navigation component for account panels",
+        "Displaying conditional data (confirmed date vs. pending)",
+        "Layout composition with nested navigation"
+      ]
+    },
+    {
+      "id": "T-025",
+      "title": "My Bookings: list page with status badges and pagination",
+      "milestone": "M6",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-024"],
+      "description": "Build the bookings list in the client panel. After this ticket: clients see all their bookings in a paginated table with color-coded status badges.",
+      "tasks": [
+        "Create `AccountBookingController@index` — return current user's bookings paginated (10/page), with package name eager-loaded",
+        "Create React page `Account/Bookings/Index.jsx`: table (booking number, package name, preferred date 1, confirmed date or 'TBD', status badge, 'View' link), pagination",
+        "Status badge colors: inquiry=amber, confirmed=blue, session_completed=purple, editing=orange, gallery_ready=green, cancelled=red",
+        "Add route: GET `/account/bookings`",
+        "Update client sub-nav: 'My Bookings' links here and is highlighted on this page",
+        "Test: visit `/account/bookings` → see all bookings for current client with correct status badges and pagination"
+      ],
+      "acceptance_criteria": [
+        "Only the current client's bookings shown (not other users')",
+        "Status badges are color-coded correctly for all 6 statuses",
+        "Pagination works",
+        "Sub-navigation highlights 'My Bookings'",
+        "Empty state shown if no bookings yet"
+      ],
+      "learning_goals": [
+        "Scoped queries (user's own data only — security critical)",
+        "Status badge color mapping in React",
+        "Reusing the pagination component",
+        "Empty state UI pattern"
+      ]
+    },
+    {
+      "id": "T-026",
+      "title": "My Bookings: booking detail page with status timeline",
+      "milestone": "M6",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-025"],
+      "description": "Build the booking detail view for clients. After this ticket: clients can view full booking details with a visual status timeline showing where they are in the session journey.",
+      "tasks": [
+        "Create `AccountBookingController@show` — find booking by ID, verify it belongs to current user (403 otherwise), eager-load package and add-ons with addon details",
+        "Create React page `Account/Bookings/Show.jsx`: booking number + submission date, package summary card (name, price, inclusions), booking details (preferred dates, confirmed date or 'Your photographer will be in touch to confirm your date', special requests, location), selected add-ons list or 'No add-ons selected', total breakdown, status timeline",
+        "Build `BookingStatusTimeline.jsx` component: 6 steps (Inquiry Received → Confirmed → Session Day → Editing → Gallery Ready → Complete), highlight current step and all completed steps, handle cancelled state gracefully",
+        "Add route: GET `/account/bookings/{booking}`",
+        "Make booking table rows in the list page link to this detail page",
+        "Test: click a booking → see full detail with correct timeline step highlighted. Access another user's booking → 403"
+      ],
+      "acceptance_criteria": [
+        "Booking detail shows all information correctly",
+        "Status timeline visually highlights the current step",
+        "Confirmed date shows a friendly 'Pending' message if not yet set",
+        "Add-ons shown if selected; empty message if none",
+        "Authorization: client can only view own bookings (403 otherwise)",
+        "Cancelled bookings handled gracefully in the timeline"
+      ],
+      "learning_goals": [
+        "Authorization checks on resource access (policy or inline check)",
+        "Multi-step status timeline UI component",
+        "Conditional rendering based on booking status",
+        "Presenting business process flow visually to end users"
+      ]
+    },
+    {
+      "id": "T-027",
+      "title": "Admin: bookings list with filters and sorting",
+      "milestone": "M7",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-022"],
+      "description": "Build the admin bookings management page. After this ticket: admins see all booking inquiries across all clients, filterable by status and sortable by date.",
+      "tasks": [
+        "Create `AdminBookingController@index` — return all bookings with client name and package name eager-loaded, paginated (20/page). Accept filters: status, preferred date range. Accept sort: submission date, preferred date 1",
+        "Create React page `Admin/Bookings/Index.jsx`: table (booking number, client name, package name, preferred date, confirmed date, status badge, 'View' action), filter bar (status dropdown, date range inputs), sortable column headers, pagination. AdminLayout",
+        "Add route: GET `/admin/bookings`",
+        "Update admin sidebar: 'Bookings' link points here. Update dashboard pending count link to point here with `?status=inquiry`",
+        "Test: visit `/admin/bookings` → see all bookings. Filter by 'inquiry' → only pending shown. Sort by preferred date → order changes"
+      ],
+      "acceptance_criteria": [
+        "All bookings across all clients are displayed",
+        "Status filter works for all 6 statuses",
+        "Date range filter narrows results correctly",
+        "Sortable by submission date and preferred date",
+        "Pagination persists filters on page change",
+        "Status badges color-coded",
+        "Admin sidebar highlights 'Bookings'"
+      ],
+      "learning_goals": [
+        "Admin data tables with multiple simultaneous filters",
+        "Sortable columns with Inertia query params",
+        "Date range filtering in Eloquent",
+        "Linking dashboard stats to filtered list views"
+      ]
+    },
+    {
+      "id": "T-028",
+      "title": "Admin: booking detail page with status update & history",
+      "milestone": "M7",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "critical",
+      "depends_on": ["T-027"],
+      "description": "Build the admin booking detail view with full status management. After this ticket: admins can view all booking details, set the confirmed session date, update status through the lifecycle, add notes, and see a history of every change.",
+      "tasks": [
+        "Create `booking_status_histories` migration: id, booking_id (FK), old_status, new_status, changed_by (user_id FK), notes (nullable), timestamps",
+        "Create `BookingStatusHistory` model and add `statusHistories()` hasMany to Booking",
+        "Create `AdminBookingController@show` — full booking with client info, package, add-ons, status history",
+        "Create `AdminBookingController@updateStatus` — validate status transition (e.g., cannot go gallery_ready → inquiry), require confirmed_date when transitioning to 'confirmed', create history record, update booking",
+        "Create React page `Admin/Bookings/Show.jsx`: client info card (name, email, phone), package summary, selected add-ons, booking details (preferred dates, special requests, location), confirmed date input (date picker, required when confirming), status dropdown + update button, admin notes textarea, status history timeline. AdminLayout",
+        "Add routes: GET `/admin/bookings/{booking}`, PATCH `/admin/bookings/{booking}/status`",
+        "Test: view inquiry → set confirmed date → change status to 'confirmed' → history records change. Try invalid transition → error shown"
+      ],
+      "acceptance_criteria": [
+        "Booking detail shows all info including client contact details",
+        "Status dropdown only shows valid next transitions",
+        "Confirmed date field appears and is required when setting status to 'confirmed'",
+        "Invalid transitions rejected with a clear error message",
+        "Every status change recorded in history with admin name, timestamp, and optional note",
+        "Admin notes editable and persisted",
+        "Status history rendered as a timeline"
+      ],
+      "learning_goals": [
+        "Status machine/transition validation logic",
+        "Audit trail pattern (status history table)",
+        "Conditional form fields based on selected action",
+        "PATCH requests for partial resource updates"
+      ]
+    },
+    {
+      "id": "T-029",
+      "title": "Admin: customer list with booking aggregates",
+      "milestone": "M7",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "medium",
+      "depends_on": ["T-022"],
+      "description": "Build the admin customer management page. After this ticket: admins see all clients with booking counts and total spent, searchable by name or email.",
+      "tasks": [
+        "Create `AdminUserController@index` — return users (role=client) with aggregates (bookings_count, total_spent) computed at DB level, paginated. Accept search param (name or email)",
+        "Create React page `Admin/Users/Index.jsx`: table (name, email, phone, registered date, bookings count, total spent, active/inactive badge), search bar, pagination. AdminLayout",
+        "Add route: GET `/admin/users`",
+        "Update admin sidebar: 'Customers' links here",
+        "Test: visit `/admin/users` → see clients with correct counts. Search by name → filtered results"
+      ],
+      "acceptance_criteria": [
+        "Client list shows aggregates (booking count, total spent) calculated at DB level",
+        "Search by name or email works",
+        "Active/inactive badge shown",
+        "Pagination works",
+        "Aggregates use `withCount` and `withSum` for efficiency"
+      ],
+      "learning_goals": [
+        "Eloquent `withCount` and `withSum` for DB-level aggregates",
+        "Efficient aggregate queries vs. loading all records",
+        "Admin customer management patterns"
+      ]
+    },
+    {
+      "id": "T-030",
+      "title": "Admin: customer detail page with activate/deactivate",
+      "milestone": "M7",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "medium",
+      "depends_on": ["T-029"],
+      "description": "Build the admin customer detail view. After this ticket: admins can view a client's full profile, booking history, and toggle their active status.",
+      "tasks": [
+        "Create `AdminUserController@show` — client info + booking history (with package names) + total spent",
+        "Create `AdminUserController@toggleActive` — flip is_active, redirect back with flash message",
+        "Create React page `Admin/Users/Show.jsx`: client info section (name, email, phone, registered date), booking history table (booking number, package, status, total, link to admin booking detail), total spent, active/inactive toggle button. AdminLayout",
+        "Add routes: GET `/admin/users/{user}`, PATCH `/admin/users/{user}/toggle-active`",
+        "Make customer list rows link to this page",
+        "Test: view client → see profile + bookings. Toggle inactive → is_active becomes false. That client tries to log in → blocked"
+      ],
+      "acceptance_criteria": [
+        "Client profile shows all info including phone",
+        "Booking history links to admin booking detail pages",
+        "Toggle active/inactive works with visual flash confirmation",
+        "Deactivated clients cannot log in",
+        "Flash message confirms status change"
+      ],
+      "learning_goals": [
+        "Active/inactive user pattern and where to enforce it",
+        "Blocking login for deactivated users",
+        "Admin detail pages composing multiple related data sources"
+      ]
+    },
+    {
+      "id": "T-031",
+      "title": "Albums: migration + model + admin CRUD + public display",
+      "milestone": "M8",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-005", "T-009"],
+      "description": "Build the albums feature. Albums are physical or digital photo products (e.g., 'Lay-Flat Photo Book 20x20', 'Digital Gallery USB') clients can purchase alongside their session. After this ticket: admin manages albums and they appear on the public site.",
+      "tasks": [
+        "Create `albums` migration: id, name, slug (unique), description, price (decimal 10,2), type (enum: digital/physical), cover_image (nullable), specs (JSON nullable — e.g., size, page count, finish), is_active (boolean default true), sort_order (integer default 0), timestamps",
+        "Create `Album` model: fillable, casts (price as decimal, specs as array), `scopeActive()`, `formattedPrice` accessor",
+        "Create `AdminAlbumController` with full CRUD",
+        "Create React pages: `Admin/Albums/Index.jsx` (table: name, type badge, price, active badge, actions), `Admin/Albums/Create.jsx` and `Edit.jsx` (form: name, type dropdown, price, description, specs key-value pairs, cover image)",
+        "Create public React page `Albums/Index.jsx`: grid of active albums with type badge, description, and price. GuestLayout",
+        "Add routes: admin CRUD under `/admin/albums`, public GET `/albums`",
+        "Test: create an album in admin → appears on public albums page. Edit price → updated. Delete with confirmation → removed"
+      ],
+      "acceptance_criteria": [
+        "Albums table created with all fields",
+        "Full admin CRUD works with flash messages",
+        "Specs stored as flexible JSON",
+        "Public albums page shows only active albums",
+        "Type badge distinguishes digital vs. physical",
+        "Non-admin cannot access admin album routes"
+      ],
+      "learning_goals": [
+        "JSON column for flexible product attributes",
+        "Enum types for product categorization",
+        "Full CRUD as a standalone feature",
+        "Public vs. admin views of the same data"
+      ]
+    },
+    {
+      "id": "T-032",
+      "title": "Add-ons: migration + model + admin CRUD",
+      "milestone": "M8",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-005", "T-009"],
+      "description": "Build the add-ons catalog. Add-ons are extras a client attaches to their booking inquiry (e.g., 'Rush Editing — 48hr delivery', 'Extra 10 Edited Photos', 'Canvas Print 30x30'). After this ticket: admin manages the add-ons catalog.",
+      "tasks": [
+        "Create `addons` migration: id, name, slug (unique), description, price (decimal 10,2), is_active (boolean default true), sort_order (integer default 0), timestamps",
+        "Create `Addon` model: fillable, casts, `scopeActive()`, `formattedPrice` accessor",
+        "Create `AdminAddonController` with full CRUD",
+        "Create React pages: `Admin/Addons/Index.jsx` (table: name, price, active badge, actions), `Admin/Addons/Create.jsx` and `Edit.jsx` (form: name, description, price, is_active toggle)",
+        "Add routes under `/admin/addons`",
+        "Update admin sidebar: 'Add-ons' links here",
+        "Seed 4 realistic add-ons directly in the seeder: Rush Editing (€75), Extra 10 Edited Photos (€50), Canvas Print 30x30 (€120), USB Drive with Full Gallery (€40)",
+        "Test: create, edit, deactivate an add-on. Inactive add-on should not appear in the booking form (from T-023)"
+      ],
+      "acceptance_criteria": [
+        "Add-ons table created",
+        "Full admin CRUD works with flash messages",
+        "4 realistic add-ons seeded",
+        "Inactive add-ons do not appear in the booking form",
+        "Admin sidebar highlights 'Add-ons'"
+      ],
+      "learning_goals": [
+        "Simple admin CRUD as a complete standalone feature",
+        "Connecting features across tickets via active/inactive state",
+        "Seeding required reference data alongside the feature"
+      ]
+    },
+    {
+      "id": "T-033",
+      "title": "Public pricing page: all packages grouped by category with add-ons section",
+      "milestone": "M8",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-017", "T-032"],
+      "description": "Build the comprehensive public pricing page. After this ticket: visitors see all packages grouped by session category with full inclusions, featured badges, and a list of available add-ons. This is the main conversion page.",
+      "tasks": [
+        "Create `PackagesController@index` — return all active packages grouped by session category (eager-load categories), and all active add-ons",
+        "Create React page `Packages/Index.jsx`: a section per category (category name + description, packages in a card grid), each card shows name, tagline, price, duration, photo count, inclusions checklist, 'Book This Session' CTA. Featured packages get a 'Most Popular' badge. Add-ons section at the bottom with name, description, and price. GuestLayout",
+        "Add route: GET `/packages`",
+        "Update navbar: 'Packages' links here",
+        "Test: visit `/packages` → all packages visible, grouped by category. Add-ons listed at bottom. CTA buttons link to correct booking form URLs"
+      ],
+      "acceptance_criteria": [
+        "All active packages displayed, correctly grouped by session category",
+        "Inclusions shown as a checklist per package card",
+        "Featured packages highlighted with a 'Most Popular' badge",
+        "Add-ons section lists all active add-ons with prices",
+        "CTA buttons link to `/bookings/create?package={slug}`",
+        "Page is responsive: 1 col mobile, 2 md, 3 lg per section"
+      ],
+      "learning_goals": [
+        "Grouping related data by relationship in controller and frontend",
+        "Pricing page design patterns for service businesses",
+        "Connecting the pricing page directly to the booking flow",
+        "Featured item highlighting"
+      ]
+    },
+    {
+      "id": "T-034",
+      "title": "Homepage: hero, featured packages, gallery preview & testimonials",
+      "milestone": "M9",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "critical",
+      "depends_on": ["T-014", "T-020", "T-017"],
+      "description": "Build the real homepage. After this ticket: the studio's landing page has a hero, featured packages preview, gallery teaser, and testimonials. It feels like a real photography studio's website.",
+      "tasks": [
+        "Update `HomeController@index`: pass featured packages (is_featured, active, with category, limit 3), active session categories (limit 5), featured gallery images (is_featured, limit 8)",
+        "Update homepage React page with sections: hero (full-width warm background + studio name + tagline 'Capturing Your First Chapter' + 'Browse Packages' and 'View Portfolio' CTAs), 'Our Sessions' category showcase (reuse from T-014), featured packages preview (3 cards with price and Book CTA), gallery teaser (8 featured images in a grid with 'View Full Portfolio' link), testimonials (3 hardcoded placeholders with client name and quote), final CTA banner ('Book Your Session Today'). GuestLayout",
+        "Ensure no N+1 queries in the controller (eager load everything)",
+        "Test: visit `/` → see all sections with real DB data. All CTAs link to correct pages"
+      ],
+      "acceptance_criteria": [
+        "Homepage renders all 6 sections",
+        "Featured packages pulled from DB (`is_featured = true`)",
+        "Gallery teaser shows 8 featured gallery images",
+        "All CTAs link to correct pages",
+        "Responsive on mobile and desktop",
+        "No N+1 queries"
+      ],
+      "learning_goals": [
+        "Composing a landing page from multiple data sources",
+        "Hero section design for service businesses",
+        "Performance: eager loading and query efficiency",
+        "CTA placement strategy for conversion"
+      ]
+    },
+    {
+      "id": "T-035",
+      "title": "About the Studio page",
+      "milestone": "M9",
+      "labels": ["frontend"],
+      "priority": "medium",
+      "depends_on": ["T-006"],
+      "description": "Build the static About page. After this ticket: visitors can read about the photographer, the studio's story, and approach. Standalone frontend ticket — no backend needed.",
+      "tasks": [
+        "Create React page `Pages/About.jsx` using GuestLayout",
+        "Sections: hero with studio tagline, photographer bio (photo placeholder + personal story), the studio's approach and philosophy (e.g., 'A calm, gentle session tailored to your newborn'), behind-the-scenes process (how a session works — 4 numbered steps), values (safety, comfort, timeless images)",
+        "Content is hardcoded for now",
+        "Add route: GET `/about`",
+        "Update navbar: 'About' links here",
+        "Test: visit `/about` → all sections render, page is responsive"
+      ],
+      "acceptance_criteria": [
+        "Page renders all sections",
+        "Responsive on mobile and desktop",
+        "Navbar 'About' link works",
+        "Consistent brand styling (fonts, colors, spacing)"
+      ],
+      "learning_goals": [
+        "Static content pages with Inertia (no backend round-trip needed)",
+        "Content-focused page layout for service businesses",
+        "Pure frontend ticket — understanding when no controller is needed"
+      ]
+    },
+    {
+      "id": "T-036",
+      "title": "Contact page with form, validation, and DB storage",
+      "milestone": "M9",
+      "labels": ["fullstack", "database", "backend", "frontend"],
+      "priority": "medium",
+      "depends_on": ["T-006"],
+      "description": "Build the contact page with a working form. After this ticket: prospective clients can send a message that gets stored in the database. Full vertical slice.",
+      "tasks": [
+        "Create `contact_messages` migration: id, name, email, phone (nullable), subject, message (text), is_read (boolean default false), timestamps",
+        "Create `ContactMessage` model: fillable, `scopeUnread()`",
+        "Create `ContactController@create` (show form) and `@store` (validate + save + redirect back with flash)",
+        "Create React page `Pages/Contact.jsx`: form (name, email, phone optional, subject, message), studio contact info sidebar (location, email, business hours), success state after submission. GuestLayout",
+        "Add routes: GET `/contact`, POST `/contact`",
+        "Update navbar: 'Contact' links here",
+        "Add unread message count to admin dashboard stat card",
+        "Test: submit form → success flash. DB has message. Submit with missing fields → inline validation errors"
+      ],
+      "acceptance_criteria": [
+        "Contact form renders with all fields",
+        "Validation: name, email, subject, message required; email format validated",
+        "Message saved to `contact_messages` table on submission",
+        "Success flash message shown after submit",
+        "Validation errors shown inline next to each field",
+        "Unread count shown on admin dashboard"
+      ],
+      "learning_goals": [
+        "Simple full-stack feature: migration → model → controller → form",
+        "Inline validation error display with Inertia",
+        "Connecting a public feature to the admin dashboard count",
+        "Contact form pattern for service businesses"
+      ]
+    },
+    {
+      "id": "T-037",
+      "title": "Admin: contact messages inbox",
+      "milestone": "M9",
+      "labels": ["fullstack", "backend", "frontend"],
+      "priority": "low",
+      "depends_on": ["T-036"],
+      "description": "Build the admin contact messages inbox. After this ticket: admins can read contact form submissions and mark them as read.",
+      "tasks": [
+        "Create `AdminMessageController@index` — paginated list of messages, newest first, unread ones visually highlighted",
+        "Create `AdminMessageController@show` — show full message, auto-mark as read on view",
+        "Create `AdminMessageController@toggleRead` — manually toggle read/unread",
+        "Create React page `Admin/Messages/Index.jsx`: table (name, email, subject, date, read/unread badge), pagination. AdminLayout",
+        "Create React page `Admin/Messages/Show.jsx`: full message details, toggle read/unread button",
+        "Add routes: GET `/admin/messages`, GET `/admin/messages/{message}`, PATCH `/admin/messages/{message}/toggle-read`",
+        "Update admin sidebar: 'Messages' link with unread count badge",
+        "Test: view a message → auto-marked read → badge disappears. Manually mark unread → badge reappears"
+      ],
+      "acceptance_criteria": [
+        "Messages listed with read/unread visual distinction",
+        "Viewing a message auto-marks it as read",
+        "Unread count badge on sidebar 'Messages' link updates",
+        "Pagination works",
+        "Flash message for manual read/unread toggle"
+      ],
+      "learning_goals": [
+        "Read/unread pattern (auto-mark on view)",
+        "Badge counts on navigation items",
+        "Simple inbox UI pattern for admin panels"
+      ]
+    },
+    {
+      "id": "T-038",
+      "title": "Services & FAQ public page",
+      "milestone": "M9",
+      "labels": ["frontend"],
+      "priority": "low",
+      "depends_on": ["T-006"],
+      "description": "Build a static Services and FAQ page. After this ticket: prospective clients can learn about the session process and get answers to common questions.",
+      "tasks": [
+        "Create React page `Pages/Services.jsx` using GuestLayout",
+        "Sections: 'How It Works' (4 steps: Inquire → Schedule → Session Day → Gallery Delivery), session prep tips (e.g., 'Best time to photograph newborns is 5–14 days old'), FAQ accordion (8–10 questions: 'How long is a newborn session?', 'What should I bring?', 'When will I receive my photos?', 'What if my baby is unwell?', 'Do you offer payment plans?', etc.)",
+        "FAQ uses an accordion component (click to expand/collapse answers)",
+        "Add route: GET `/services`",
+        "Link from the footer and the homepage CTA section",
+        "Test: visit `/services` → all sections visible, FAQ accordion expands and collapses"
+      ],
+      "acceptance_criteria": [
+        "All sections render correctly and are responsive",
+        "FAQ accordion opens and closes correctly",
+        "Consistent brand styling",
+        "Linked from footer"
+      ],
+      "learning_goals": [
+        "Accordion UI component in React using local state",
+        "Static service/FAQ pages for professional websites",
+        "When to use local state vs. no state at all"
+      ]
+    },
+    {
+      "id": "T-039",
+      "title": "Flash/toast notification system",
+      "milestone": "M10",
+      "labels": ["fullstack", "frontend"],
+      "priority": "high",
+      "depends_on": ["T-005"],
+      "description": "Build a global toast notification system. After this ticket: all flash messages across the app display as dismissible toasts. This retroactively improves every earlier feature.",
+      "tasks": [
+        "Create `ToastNotification.jsx` component: appears top-right, auto-dismiss after 5s, manually dismissible via X, types: success (green), error (red), warning (yellow), info (blue)",
+        "In `HandleInertiaRequests` middleware: share `flash` data (message + type) as a global prop on every response",
+        "Create a `useFlash()` hook or embed toast logic in the root App component so it reads flash on every Inertia page visit",
+        "Retroactively verify: category CRUD, package CRUD, booking submission, admin status updates all trigger the correct toast type and color",
+        "Test: create a category → green toast. Trigger a validation error → red toast. Click X → closes immediately. Two actions in quick succession → toasts stack"
+      ],
+      "acceptance_criteria": [
+        "Toast appears for all flash messages globally",
+        "4 types with correct colors: success, error, warning, info",
+        "Auto-dismiss after 5 seconds",
+        "Manually dismissible via X button",
+        "Works on all three app sections (admin, client, public)",
+        "Multiple toasts stack correctly"
+      ],
+      "learning_goals": [
+        "Global UI components in Inertia apps",
+        "Inertia shared data as a cross-cutting concern",
+        "Toast/notification UX pattern",
+        "Custom React hooks for shared behavior"
+      ]
+    },
+    {
+      "id": "T-040",
+      "title": "Reusable form input components library",
+      "milestone": "M10",
+      "labels": ["frontend"],
+      "priority": "medium",
+      "depends_on": ["T-003"],
+      "description": "Extract and standardize form input components. After this ticket: all forms across the app use consistent, accessible, branded input components.",
+      "tasks": [
+        "Create `TextInput.jsx`: label, placeholder, error display below input, required indicator",
+        "Create `TextArea.jsx`: same pattern with configurable rows prop",
+        "Create `SelectInput.jsx`: options array prop, label, error display",
+        "Create `Checkbox.jsx` and `Toggle.jsx`",
+        "Create `DateInput.jsx`: styled date picker with min-date prop support",
+        "All components accept an `error` prop from Inertia `useForm().errors` and display it below the input",
+        "Refactor 2–3 existing forms to use these components (e.g., booking create form, category create form, contact form)",
+        "Test: verify refactored forms still work identically to before"
+      ],
+      "acceptance_criteria": [
+        "6 reusable form components created",
+        "All display validation errors from Inertia useForm",
+        "Consistent HappyMom brand styling across all inputs",
+        "Accessible: labels linked to inputs via htmlFor",
+        "At least 2–3 existing forms refactored to use them",
+        "No functional regressions after refactoring"
+      ],
+      "learning_goals": [
+        "Component extraction and retroactive refactoring",
+        "Consistent form patterns across a multi-page app",
+        "Accessibility: labels, htmlFor, ARIA",
+        "DRY principle applied retroactively without breaking things"
+      ]
+    },
+    {
+      "id": "T-041",
+      "title": "Confirmation modal & empty state reusable components",
+      "milestone": "M10",
+      "labels": ["frontend"],
+      "priority": "medium",
+      "depends_on": ["T-003"],
+      "description": "Extract confirmation modals and empty states into reusable components. After this ticket: all delete confirmations and empty states across the app are visually consistent.",
+      "tasks": [
+        "Create `ConfirmModal.jsx`: props (title, message, confirmLabel, cancelLabel, onConfirm, variant: danger/warning). Focus trap, ESC to close, backdrop click to close",
+        "Create `EmptyState.jsx`: props (icon, title, description, actionButton). Centered layout",
+        "Refactor existing delete confirmations (categories, packages, gallery images) to use ConfirmModal",
+        "Refactor existing empty states (bookings list, messages inbox) to use EmptyState",
+        "Test: all refactored features still work. Modal closes on ESC and backdrop click. Danger variant shows red confirm button"
+      ],
+      "acceptance_criteria": [
+        "ConfirmModal is accessible (focus trap, ESC key, backdrop click)",
+        "Danger variant uses a red confirm button",
+        "EmptyState is clean with an optional CTA button",
+        "All existing confirmations and empty states refactored",
+        "No functional regressions"
+      ],
+      "learning_goals": [
+        "Accessible modal patterns in React",
+        "Focus trap implementation",
+        "Retroactive component extraction without regression"
+      ]
+    },
+    {
+      "id": "T-042",
+      "title": "SEO meta tags with Inertia Head",
+      "milestone": "M10",
+      "labels": ["fullstack", "frontend"],
+      "priority": "medium",
+      "depends_on": ["T-034", "T-021"],
+      "description": "Add proper SEO meta tags to all public pages. After this ticket: every public page has a unique title, meta description, and Open Graph tags for social sharing.",
+      "tasks": [
+        "Create a `useSeo({ title, description, image })` custom hook that renders Inertia `<Head>` with title, meta description, og:title, og:description, og:image, og:type",
+        "Apply to: homepage, portfolio, packages index, individual package pages (dynamic data), about, contact, services",
+        "Package detail pages: og:image uses a featured gallery image from the same session category",
+        "Test: inspect `<head>` source for each public page → correct unique tags present"
+      ],
+      "acceptance_criteria": [
+        "Every public page has a unique `<title>`",
+        "Meta description set per page",
+        "Open Graph tags (og:title, og:description, og:image) set on key pages",
+        "Package pages use dynamic data for meta tags",
+        "useSeo hook is reusable with a simple API"
+      ],
+      "learning_goals": [
+        "SEO fundamentals for Inertia/React SPAs",
+        "Inertia Head component",
+        "Custom React hooks",
+        "Open Graph protocol for social sharing previews"
+      ]
+    },
+    {
+      "id": "T-043",
+      "title": "Image optimization on upload",
+      "milestone": "M10",
+      "labels": ["backend"],
+      "priority": "medium",
+      "depends_on": ["T-019"],
+      "description": "Automatically optimize images when uploaded. After this ticket: all gallery and cover images are resized, compressed, and have thumbnails generated — reducing storage and improving page load speed.",
+      "tasks": [
+        "Install Intervention Image library (`intervention/image`)",
+        "Create an `ImageService`: resize to max 1920px width, compress to 80% quality, generate a 400px thumbnail",
+        "Store both optimized image and thumbnail with naming convention (`{hash}.jpg`, `{hash}_thumb.jpg`)",
+        "Integrate into gallery image upload (`AdminGalleryController`) and category cover image upload (`AdminCategoryController`)",
+        "Add `thumbnailUrl` accessor to GalleryImage model alongside existing `url`",
+        "Test: upload a large 5MB image → stored file is significantly smaller. Thumbnail exists. Both URLs accessible in browser"
+      ],
+      "acceptance_criteria": [
+        "Gallery images auto-resized to max 1920px width and compressed",
+        "400px thumbnails generated for every upload",
+        "Original file not retained — optimized version replaces it",
+        "Thumbnails used in admin gallery grid and public portfolio grid",
+        "Noticeable file size reduction compared to original upload"
+      ],
+      "learning_goals": [
+        "Image processing in PHP with Intervention Image",
+        "Service pattern for cross-cutting upload logic",
+        "Thumbnail generation strategy",
+        "Storage optimization for media-heavy applications"
+      ]
+    },
+    {
+      "id": "T-044",
+      "title": "Security headers & rate limiting on sensitive endpoints",
+      "milestone": "M10",
+      "labels": ["backend", "security"],
+      "priority": "high",
+      "depends_on": ["T-004"],
+      "description": "Harden the app with security headers and protect sensitive endpoints from abuse. After this ticket: the app has production-grade security headers and rate limiting on auth and booking routes.",
+      "tasks": [
+        "Verify CSRF protection is active for all Inertia POST/PUT/DELETE requests (starter kit should handle this — confirm with a manual test)",
+        "Add security headers via middleware: X-Frame-Options (DENY), X-Content-Type-Options (nosniff), Referrer-Policy (strict-origin-when-cross-origin)",
+        "Add rate limiting: registration (3/min), contact form (5/min), booking inquiry (10/min). Verify starter kit's login throttling exists",
+        "Review all models: verify no model uses `$guarded = []`",
+        "Create user-friendly 429 response: show a clear message rather than a raw error",
+        "Test: inspect response headers in DevTools → security headers present. Submit booking 11 times rapidly → rate limited with friendly message"
+      ],
+      "acceptance_criteria": [
+        "CSRF validation active on all state-changing requests",
+        "Security headers present in all responses",
+        "Registration, contact form, and booking inquiry rate-limited",
+        "429 responses show user-friendly message",
+        "No model uses unguarded mass assignment"
+      ],
+      "learning_goals": [
+        "Web security headers and why they matter",
+        "CSRF protection in Inertia apps",
+        "Laravel throttle middleware",
+        "Mass assignment protection in Eloquent"
+      ]
+    },
+    {
+      "id": "T-045",
+      "title": "Email setup & booking inquiry confirmation email",
+      "milestone": "M11",
+      "labels": ["backend"],
+      "priority": "medium",
+      "depends_on": ["T-022"],
+      "description": "Configure email and send the first transactional email. After this ticket: submitting a booking inquiry triggers a branded confirmation email to the client.",
+      "tasks": [
+        "Configure mail driver in `.env` (Mailtrap for dev, or log driver as fallback)",
+        "Customize default Laravel mail template: HappyMom Photography logo, brand colors (blush/warm palette), footer with studio contact info",
+        "Create `BookingInquiryReceivedMail` mailable: booking number, package name, preferred dates, special requests summary, 'View Your Booking' link, 'What happens next?' section",
+        "Trigger the email in `BookingService::createBooking()` after successful booking creation",
+        "Test: submit a booking → email delivered to Mailtrap. Email contains booking number, correct package name, branding"
+      ],
+      "acceptance_criteria": [
+        "Mail driver configured and receiving emails in Mailtrap",
+        "Mail template branded with HappyMom Photography identity",
+        "Booking confirmation email sent after inquiry submission",
+        "Email contains: booking number, package name, preferred dates, 'View Booking' link",
+        "Link points to `/account/bookings/{booking}`"
+      ],
+      "learning_goals": [
+        "Laravel mail configuration and Mailtrap setup",
+        "Mailable classes and their structure",
+        "Blade email templates with custom branding",
+        "Triggering emails from service classes"
+      ]
+    },
+    {
+      "id": "T-046",
+      "title": "Booking status update emails",
+      "milestone": "M11",
+      "labels": ["backend"],
+      "priority": "medium",
+      "depends_on": ["T-028", "T-045"],
+      "description": "Send emails to clients when the admin updates a booking's status. After this ticket: clients are automatically notified at each key stage of their session journey.",
+      "tasks": [
+        "Create `BookingStatusUpdatedMail` mailable with contextual messaging per status: confirmed ('Your session is confirmed for {date}!'), session_completed ('Your photos are being edited — we can't wait to share them!'), editing ('Editing is in progress'), gallery_ready ('Your gallery is ready to view!')",
+        "Create a separate `BookingCancelledMail` with an apologetic tone and studio contact info",
+        "Trigger status emails from `AdminBookingController@updateStatus` after the status change",
+        "Test: change status to 'confirmed' in admin → client receives email with confirmed date. Change to 'gallery_ready' → client receives celebratory email"
+      ],
+      "acceptance_criteria": [
+        "Status update email sent on each status change from admin",
+        "Messaging is contextual and appropriate per status",
+        "Confirmed email includes the confirmed session date",
+        "Gallery ready email has a celebratory tone",
+        "Cancellation email uses a separate mailable with apologetic messaging",
+        "All emails use the branded HappyMom Photography template"
+      ],
+      "learning_goals": [
+        "Conditional email content based on business state",
+        "Event-driven notification patterns",
+        "Client communication design in booking applications"
+      ]
+    },
+    {
+      "id": "T-047",
+      "title": "Welcome email on registration",
+      "milestone": "M11",
+      "labels": ["backend"],
+      "priority": "low",
+      "depends_on": ["T-045"],
+      "description": "Send a warm welcome email when a new client registers. After this ticket: every new account receives a branded welcome message with a booking CTA.",
+      "tasks": [
+        "Create `WelcomeEmail` mailable: warm welcome message with the client's first name, studio intro paragraph, 'Browse Our Packages' CTA linking to /packages, photographer's name in the closing",
+        "Implement `ShouldQueue` on the mailable for async delivery so registration is not slowed down",
+        "Trigger after successful registration (hook into the registered event or add to the RegisteredUserController)",
+        "Test: register a new account → welcome email queued and delivered asynchronously. Email contains CTA link and personal tone"
+      ],
+      "acceptance_criteria": [
+        "Welcome email sent after every new registration",
+        "Email is queued (async — does not block the registration redirect)",
+        "Contains 'Browse Our Packages' CTA link to /packages",
+        "Warm, personal tone appropriate for a photography studio",
+        "Branded with HappyMom Photography template"
+      ],
+      "learning_goals": [
+        "Queued mailables with ShouldQueue interface",
+        "Async vs. synchronous email sending and why it matters",
+        "Registration event hooks in Laravel"
+      ]
+    },
+    {
+      "id": "T-048",
+      "title": "Test environment setup & first passing test",
+      "milestone": "M12",
+      "labels": ["testing", "backend"],
+      "priority": "high",
+      "depends_on": ["T-002"],
+      "description": "Set up the testing environment and write the first passing tests. After this ticket: `php artisan test` runs green.",
+      "tasks": [
+        "Configure `phpunit.xml` with an in-memory SQLite test database",
+        "Verify `RefreshDatabase` trait resets state between tests",
+        "Verify all factories generate valid records (User, SessionCategory, Package, GalleryImage, Booking, etc.)",
+        "Write 2 smoke tests: homepage returns 200, packages page returns 200",
+        "Run `php artisan test` → all green",
+        "Document test setup briefly in README"
+      ],
+      "acceptance_criteria": [
+        "`php artisan test` runs without errors",
+        "Test database resets between test cases",
+        "All model factories generate valid records",
+        "At least 2 passing tests"
+      ],
+      "learning_goals": [
+        "PHPUnit configuration for Laravel",
+        "In-memory SQLite for fast isolated tests",
+        "RefreshDatabase trait",
+        "Writing the first green test"
+      ]
+    },
+    {
+      "id": "T-049",
+      "title": "Feature tests: authentication & role-based access",
+      "milestone": "M12",
+      "labels": ["testing", "backend"],
+      "priority": "high",
+      "depends_on": ["T-048"],
+      "description": "Write tests covering the full auth flow and role-based access controls. After this ticket: the auth system and admin gate are fully tested.",
+      "tasks": [
+        "Test registration: valid data → user created and logged in. Invalid (duplicate email, missing name) → validation errors",
+        "Test login: valid credentials → authenticated. Wrong password → error. Inactive user → blocked",
+        "Test logout: session destroyed, redirected to /",
+        "Test admin middleware: client → 403 on /admin. Admin → 200. Unauthenticated → redirect to login",
+        "Test role-based redirect: admin login → /admin. Client login → /",
+        "Minimum 10 test cases total"
+      ],
+      "acceptance_criteria": [
+        "All auth flows tested with correct assertions",
+        "Admin middleware tested for all three actor types (admin, client, guest)",
+        "Inactive user login blocked and tested",
+        "Role-based redirects tested",
+        "All tests pass"
+      ],
+      "learning_goals": [
+        "Feature testing in Laravel",
+        "Testing authentication flows end-to-end",
+        "Testing middleware authorization",
+        "Assertion methods: assertAuthenticated, assertRedirect, assertStatus"
+      ]
+    },
+    {
+      "id": "T-050",
+      "title": "Feature tests: packages & categories admin CRUD",
+      "milestone": "M12",
+      "labels": ["testing", "backend"],
+      "priority": "high",
+      "depends_on": ["T-048"],
+      "description": "Write tests for admin package and category management. After this ticket: the core content management features are fully tested including authorization.",
+      "tasks": [
+        "Test category creation: valid data → category in DB with auto-generated slug. Invalid (missing name) → validation error",
+        "Test category edit and delete (empty category deletes, category with packages rejects deletion)",
+        "Test package creation: valid data → package in DB with inclusions JSON. Invalid data → validation errors",
+        "Test package soft delete: soft-deleted → gone from list, still in DB with deleted_at timestamp",
+        "Test authorization: client accessing admin routes → 403. Unauthenticated → redirect to login",
+        "Test public packages page: returns only active packages. Soft-deleted packages not shown"
+      ],
+      "acceptance_criteria": [
+        "Category and package CRUD operations fully tested with DB assertions",
+        "Slug auto-generation tested",
+        "Authorization tested for all admin routes",
+        "Soft delete behavior tested",
+        "Public pages only show active, non-deleted content",
+        "All tests pass"
+      ],
+      "learning_goals": [
+        "Testing CRUD with database assertions",
+        "Testing authorization scenarios (403)",
+        "Testing slug generation",
+        "Testing JSON columns and soft deletes"
+      ]
+    },
+    {
+      "id": "T-051",
+      "title": "Feature tests: booking inquiry flow",
+      "milestone": "M12",
+      "labels": ["testing", "backend"],
+      "priority": "high",
+      "depends_on": ["T-048"],
+      "description": "Write tests covering the complete booking inquiry pipeline. After this ticket: the booking flow is fully tested from form submission to admin status update.",
+      "tasks": [
+        "Test booking creation: authenticated client + valid data → booking in DB with status 'inquiry' and correct HMP-XXXXXXXX number format",
+        "Test booking creation: unauthenticated → redirect to login",
+        "Test booking creation: invalid data (missing preferred_date_1, past date) → validation errors",
+        "Test add-ons: booking with add-ons → booking_addons records created, total calculated correctly",
+        "Test authorization: client can view own booking (200). Client cannot view another client's booking (403)",
+        "Test admin status update: valid transition creates history record. Invalid transition is rejected",
+        "Minimum 8 test cases"
+      ],
+      "acceptance_criteria": [
+        "Booking creation tested with DB state assertions (booking number format, status, total)",
+        "Authentication requirement tested",
+        "Future-date validation tested",
+        "Add-on price calculation tested",
+        "Authorization on booking access tested",
+        "Status transition logic tested for valid and invalid cases",
+        "Status history creation tested",
+        "All tests pass"
+      ],
+      "learning_goals": [
+        "Testing complex business flows with DB assertions",
+        "Testing service classes in feature tests",
+        "Testing status machine transitions",
+        "Testing audit trail (history record) creation"
+      ]
+    },
+    {
+      "id": "T-052",
+      "title": "Production environment config & deploy script",
+      "milestone": "M12",
+      "labels": ["devops"],
+      "priority": "high",
+      "depends_on": [],
+      "description": "Prepare the app for production deployment. After this ticket: a deploy script automates the full deployment process and the app is production-ready.",
+      "tasks": [
+        "Create `.env.production.example` with all required vars: APP_ENV=production, APP_DEBUG=false, DB credentials, mail config, APP_URL=https://happymom-photography.com, FILESYSTEM_DISK=public, QUEUE_CONNECTION=database",
+        "Document server requirements in README: PHP 8.3+, MySQL 8+, required PHP extensions (GD or Imagick for image processing), Node.js for asset build, storage symlink",
+        "Create `deploy.sh` script: `npm run build`, `php artisan migrate --force`, `php artisan storage:link`, `php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`, `php artisan optimize`",
+        "Create production seeder: creates only the admin account, no sample or demo data",
+        "Verify `npm run build` produces optimized assets with cache-busted filenames",
+        "Document queue worker setup in README (required for async welcome email from T-047)",
+        "Document rollback procedure"
+      ],
+      "acceptance_criteria": [
+        "`.env.production.example` committed with all necessary variables documented",
+        "README has a complete server requirements section",
+        "`deploy.sh` automates full deployment in one command",
+        "Production seeder creates only the admin account",
+        "`npm run build` produces minified, versioned assets",
+        "Queue worker requirement documented for async mail"
+      ],
+      "learning_goals": [
+        "Production deployment configuration for Laravel",
+        "Laravel optimization commands and what each one does",
+        "Environment-specific seeders",
+        "Build pipeline automation",
+        "Queue worker requirements for async features"
       ]
     }
   ]
