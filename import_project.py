@@ -3,14 +3,12 @@
 import_project.py
 -----------------
 Reads a hierarchical project JSON file and imports it into a GitHub
-Repository (Milestones, Labels, Issues) and a GitHub Project V2 via GraphQL.
+Repository (Milestones, Labels, Issues) and a newly created GitHub Project V2.
 
 Usage:
     python import_project.py [path/to/project.json]
 
 Defaults to "project.json" in the current directory.
-
-See the guide at the bottom of this file for how to obtain PROJECT_ID.
 """
 
 import json
@@ -35,12 +33,12 @@ CYAN   = "\033[36m"
 DIM    = "\033[2m"
 
 
-def ok(msg: str)    -> None: print(f"  {GREEN}✅ {msg}{RESET}")
-def warn(msg: str)  -> None: print(f"  {YELLOW}⚠️  {msg}{RESET}")
-def err(msg: str)   -> None: print(f"  {RED}❌ {msg}{RESET}")
-def info(msg: str)  -> None: print(f"  {CYAN}ℹ️  {msg}{RESET}")
-def step(msg: str)  -> None: print(f"\n{BOLD}{msg}{RESET}")
-def dim(msg: str)   -> None: print(f"  {DIM}{msg}{RESET}")
+def ok(msg: str)   -> None: print(f"  {GREEN}✅ {msg}{RESET}")
+def warn(msg: str) -> None: print(f"  {YELLOW}⚠️  {msg}{RESET}")
+def err(msg: str)  -> None: print(f"  {RED}❌ {msg}{RESET}")
+def info(msg: str) -> None: print(f"  {CYAN}ℹ️  {msg}{RESET}")
+def step(msg: str) -> None: print(f"\n{BOLD}{msg}{RESET}")
+def dim(msg: str)  -> None: print(f"  {DIM}{msg}{RESET}")
 
 
 # ---------------------------------------------------------------------------
@@ -51,7 +49,7 @@ def load_config() -> dict:
     """Load and validate required environment variables."""
     load_dotenv()
 
-    required = ["GITHUB_TOKEN", "REPO_OWNER", "REPO_NAME", "PROJECT_ID"]
+    required = ["GITHUB_TOKEN", "REPO_OWNER", "REPO_NAME"]
     config = {key: os.getenv(key) for key in required}
 
     missing = [k for k, v in config.items() if not v]
@@ -92,7 +90,6 @@ def request_with_retry(
     Retries on:
       - 429  Too Many Requests
       - 403  with a Retry-After header (secondary rate limit)
-    Raises on any other non-2xx status after exhausting retries.
     """
     for attempt in range(1, max_retries + 1):
         response = session.request(method, url, **kwargs)
@@ -114,7 +111,6 @@ def request_with_retry(
 
         return response
 
-    # If we exhausted retries, return the last response and let callers decide.
     warn(f"Exhausted {max_retries} retries for {method.upper()} {url}")
     return response
 
@@ -177,6 +173,87 @@ def graphql(session, query: str, variables: dict):
 
 
 # ---------------------------------------------------------------------------
+# Step 0 — Create GitHub Project V2
+# ---------------------------------------------------------------------------
+
+_OWNER_USER_QUERY = """
+query GetUser($login: String!) {
+  user(login: $login) {
+    id
+    login
+  }
+}
+"""
+
+_OWNER_ORG_QUERY = """
+query GetOrg($login: String!) {
+  organization(login: $login) {
+    id
+    login
+  }
+}
+"""
+
+_CREATE_PROJECT_MUTATION = """
+mutation CreateProject($ownerId: ID!, $title: String!) {
+  createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+    projectV2 {
+      id
+      title
+      url
+    }
+  }
+}
+"""
+
+
+def resolve_owner_id(session, owner_login: str) -> str:
+    """
+    Return the GraphQL node ID for a GitHub user or organization login.
+    Tries user first; falls back to organization.
+    Exits the program if neither resolves.
+    """
+    data = graphql(session, _OWNER_USER_QUERY, {"login": owner_login})
+    if data and data.get("user"):
+        node_id = data["user"]["id"]
+        dim(f"Owner resolved as user: {owner_login} ({node_id})")
+        return node_id
+
+    data = graphql(session, _OWNER_ORG_QUERY, {"login": owner_login})
+    if data and data.get("organization"):
+        node_id = data["organization"]["id"]
+        dim(f"Owner resolved as organization: {owner_login} ({node_id})")
+        return node_id
+
+    err(f'Could not resolve "{owner_login}" as a GitHub user or organization.')
+    err("Check that REPO_OWNER in your .env is correct and your token has the right scopes.")
+    sys.exit(1)
+
+
+def create_project_v2(session, owner_login: str, title: str) -> str:
+    """
+    Create a new GitHub Project V2 under the given owner.
+    Returns the project's GraphQL node ID (used later to link issues).
+    """
+    step("Step 0 — Creating GitHub Project V2")
+
+    owner_id = resolve_owner_id(session, owner_login)
+
+    data = graphql(session, _CREATE_PROJECT_MUTATION, {"ownerId": owner_id, "title": title})
+    if not data or not data.get("createProjectV2", {}).get("projectV2"):
+        err(f'Failed to create project "{title}".')
+        err("Ensure your token has the 'project' scope (read:project + write:project).")
+        sys.exit(1)
+
+    project = data["createProjectV2"]["projectV2"]
+    ok(f'Created Project V2: "{project["title"]}"')
+    dim(f'  {project["url"]}')
+    dim(f'  Node ID: {project["id"]}')
+
+    return project["id"]
+
+
+# ---------------------------------------------------------------------------
 # Step 1 — Milestones
 # ---------------------------------------------------------------------------
 
@@ -235,7 +312,6 @@ def ensure_labels(session, base_url: str, tickets: list) -> None:
             break
         existing_labels.update(lbl["name"] for lbl in page_data)
 
-    # Determine which labels we need.
     needed: set[str] = set()
     for ticket in tickets:
         needed.update(ticket.get("labels", []))
@@ -245,7 +321,6 @@ def ensure_labels(session, base_url: str, tickets: list) -> None:
         info("All labels already exist — nothing to create.")
         return
 
-    # A small palette so auto-created labels aren't all the same colour.
     colors = ["0075ca", "e4e669", "d73a4a", "cfd3d7", "a2eeef", "008672", "e99695"]
     for i, label in enumerate(sorted(to_create)):
         color = colors[i % len(colors)]
@@ -264,31 +339,26 @@ def build_issue_body(ticket: dict) -> str:
     """Render a rich Markdown body from a ticket dict."""
     lines: list[str] = []
 
-    # Description
     if description := ticket.get("description", "").strip():
         lines += ["## Description", "", description, ""]
 
-    # Tasks checklist
     if tasks := ticket.get("tasks", []):
         lines += ["## Tasks", ""]
         lines += [f"- [ ] {t}" for t in tasks]
         lines.append("")
 
-    # Acceptance criteria checklist
     if criteria := ticket.get("acceptance_criteria", []):
         lines += ["## Acceptance Criteria", ""]
         lines += [f"- [ ] {c}" for c in criteria]
         lines.append("")
 
-    # Learning goals bulleted list
     if goals := ticket.get("learning_goals", []):
         lines += ["## Learning Goals", ""]
         lines += [f"- {g}" for g in goals]
         lines.append("")
 
-    # Footer
     if ticket_id := ticket.get("id"):
-        lines += [f"---", f"*Ticket ID: `{ticket_id}`*"]
+        lines += ["---", f"*Ticket ID: `{ticket_id}`*"]
 
     return "\n".join(lines).strip()
 
@@ -297,7 +367,7 @@ def build_issue_body(ticket: dict) -> str:
 # Step 4 — Issues
 # ---------------------------------------------------------------------------
 
-ADD_ITEM_MUTATION = """
+_ADD_ITEM_MUTATION = """
 mutation AddItemToProject($projectId: ID!, $contentId: ID!) {
   addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
     item {
@@ -323,7 +393,6 @@ def create_issues(
         title = ticket.get("title", f"Untitled Ticket {idx}")
         print(f"\n  [{idx}/{total}] {BOLD}{title}{RESET}")
 
-        # Build the request payload.
         body             = build_issue_body(ticket)
         local_milestone  = ticket.get("milestone")
         milestone_number = milestone_map.get(local_milestone) if local_milestone else None
@@ -335,10 +404,9 @@ def create_issues(
         if labels:
             issue_payload["labels"] = labels
 
-        # Create the issue via REST.
         issue_data = rest_post(session, f"{base_url}/issues", issue_payload)
         if not issue_data:
-            err(f'  Skipping project link for "{title}" due to creation failure.')
+            err(f'Skipping project link for "{title}" due to creation failure.')
             continue
 
         issue_number  = issue_data["number"]
@@ -348,10 +416,9 @@ def create_issues(
         ok(f"Created Issue #{issue_number}: {title}")
         dim(f"  {issue_url}")
 
-        # Link to Project V2 via GraphQL.
         gql_data = graphql(
             session,
-            ADD_ITEM_MUTATION,
+            _ADD_ITEM_MUTATION,
             {"projectId": project_id, "contentId": issue_node_id},
         )
 
@@ -361,7 +428,6 @@ def create_issues(
         else:
             warn(f"Issue #{issue_number} created but could not be linked to Project V2.")
 
-        # Small polite pause between issues to avoid secondary rate limits.
         if idx < total:
             time.sleep(0.5)
 
@@ -375,7 +441,6 @@ def main() -> None:
     print("  GitHub Project Importer")
     print(f"{'='*60}{RESET}")
 
-    # Locate the JSON file (first CLI arg or default).
     json_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("project.json")
     if not json_path.exists():
         err(f"JSON file not found: {json_path}")
@@ -386,13 +451,15 @@ def main() -> None:
     with json_path.open(encoding="utf-8") as fh:
         data = json.load(fh)
 
-    config     = load_config()
-    session    = build_session(config["GITHUB_TOKEN"])
-    base_url   = f"https://api.github.com/repos/{config['REPO_OWNER']}/{config['REPO_NAME']}"
-    project_id = config["PROJECT_ID"]
+    config   = load_config()
+    session  = build_session(config["GITHUB_TOKEN"])
+    base_url = f"https://api.github.com/repos/{config['REPO_OWNER']}/{config['REPO_NAME']}"
 
-    info(f"Target repo  : {config['REPO_OWNER']}/{config['REPO_NAME']}")
-    info(f"Project V2 ID: {project_id}")
+    project_meta = data.get("project", {})
+    project_name = project_meta.get("name") or config["REPO_NAME"]
+
+    info(f"Target repo : {config['REPO_OWNER']}/{config['REPO_NAME']}")
+    info(f"Project name: {project_name}")
 
     milestones = data.get("milestones", [])
     tickets    = data.get("tickets", [])
@@ -400,6 +467,9 @@ def main() -> None:
     if not milestones and not tickets:
         warn("No milestones or tickets found in JSON. Nothing to do.")
         sys.exit(0)
+
+    # Step 0: create the Project V2 from scratch.
+    project_id = create_project_v2(session, config["REPO_OWNER"], project_name)
 
     milestone_map = sync_milestones(session, base_url, milestones)
     ensure_labels(session, base_url, tickets)
@@ -412,54 +482,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-# =============================================================================
-# HOW TO FIND YOUR GITHUB PROJECT V2 NODE ID
-# =============================================================================
-#
-# The GitHub UI shows a simple project NUMBER in the URL, e.g.:
-#   https://github.com/orgs/my-org/projects/5   ← "5" is the number
-#
-# The GraphQL API needs the *internal Node ID*, which looks like:
-#   PVT_kwDOBxxxxxxxxxxxxxxx
-#
-# There are two easy ways to find it:
-#
-# ── Option A: GitHub CLI (recommended) ──────────────────────────────────────
-#
-#   For a USER-owned project:
-#     gh project list --owner YOUR_USERNAME --format json \
-#       | python3 -c "import json,sys; [print(p['id'], p['number'], p['title']) for p in json.load(sys.stdin)['projects']]"
-#
-#   For an ORG-owned project:
-#     gh project list --owner YOUR_ORG --format json \
-#       | python3 -c "import json,sys; [print(p['id'], p['number'], p['title']) for p in json.load(sys.stdin)['projects']]"
-#
-#   The 'id' column in the output IS the Node ID. Copy it into PROJECT_ID in .env.
-#
-# ── Option B: GraphQL query ─────────────────────────────────────────────────
-#
-#   Run the query below (replace <YOUR_LOGIN> and <PROJECT_NUMBER>):
-#
-#   curl -s -X POST https://api.github.com/graphql \
-#     -H "Authorization: Bearer YOUR_TOKEN" \
-#     -H "Content-Type: application/json" \
-#     -d '{
-#       "query": "{ user(login: \"<YOUR_LOGIN>\") { projectV2(number: <PROJECT_NUMBER>) { id title } } }"
-#     }' | python3 -m json.tool
-#
-#   For an org, replace `user` with `organization`:
-#
-#   curl -s -X POST https://api.github.com/graphql \
-#     -H "Authorization: Bearer YOUR_TOKEN" \
-#     -H "Content-Type: application/json" \
-#     -d '{
-#       "query": "{ organization(login: \"<YOUR_ORG>\") { projectV2(number: <PROJECT_NUMBER>) { id title } } }"
-#     }' | python3 -m json.tool
-#
-#   The response will contain:
-#     "id": "PVT_kwDOBxxxxxxxxxxxxxxx"
-#
-#   Copy that value into PROJECT_ID in your .env file.
-# =============================================================================
