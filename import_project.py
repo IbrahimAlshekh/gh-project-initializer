@@ -357,8 +357,19 @@ def build_issue_body(ticket: dict) -> str:
         lines += [f"- {g}" for g in goals]
         lines.append("")
 
+    # Metadata footer (dates, assignees, ticket ID)
+    meta: list[str] = []
+    if start := ticket.get("start_date"):
+        meta.append(f"📅 **Start:** {start}")
+    if end := ticket.get("end_date"):
+        meta.append(f"🏁 **Due:** {end}")
+    if assignees := ticket.get("assignees", []):
+        meta.append(f"👤 **Assigned to:** {', '.join(f'@{a}' for a in assignees)}")
     if ticket_id := ticket.get("id"):
-        lines += ["---", f"*Ticket ID: `{ticket_id}`*"]
+        meta.append(f"🔖 **Ticket ID:** `{ticket_id}`")
+
+    if meta:
+        lines += ["---", *meta]
 
     return "\n".join(lines).strip()
 
@@ -377,6 +388,217 @@ mutation AddItemToProject($projectId: ID!, $contentId: ID!) {
 }
 """
 
+_GET_PROJECT_FIELDS_QUERY = """
+query GetProjectFields($projectId: ID!) {
+  node(id: $projectId) {
+    ... on ProjectV2 {
+      fields(first: 30) {
+        nodes {
+          ... on ProjectV2Field {
+            id
+            name
+          }
+          ... on ProjectV2SingleSelectField {
+            id
+            name
+            options {
+              id
+              name
+            }
+          }
+          ... on ProjectV2IterationField {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+_CREATE_FIELD_MUTATION = """
+mutation CreateField($projectId: ID!, $dataType: ProjectV2CustomFieldType!, $name: String!, $options: [ProjectV2SingleSelectFieldOptionInput!]) {
+  createProjectV2Field(input: {
+    projectId: $projectId,
+    dataType: $dataType,
+    name: $name,
+    singleSelectOptions: $options
+  }) {
+    projectV2Field {
+      ... on ProjectV2Field {
+        id
+        name
+      }
+      ... on ProjectV2SingleSelectField {
+        id
+        name
+        options {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+"""
+
+_UPDATE_FIELD_VALUE_MUTATION = """
+mutation UpdateFieldValue($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: ProjectV2FieldValue!) {
+  updateProjectV2ItemFieldValue(input: {
+    projectId: $projectId,
+    itemId: $itemId,
+    fieldId: $fieldId,
+    value: $value
+  }) {
+    projectV2Item {
+      id
+    }
+  }
+}
+"""
+
+# Type options used when creating the single-select Type field
+_TYPE_OPTIONS = ["Feature", "Chore", "Design"]
+
+
+def setup_project_fields(session, project_id: str) -> dict:
+    """
+    Ensure the four custom fields exist on the project:
+      - Start Date  (DATE)
+      - End Date    (DATE)
+      - Estimation  (NUMBER)
+      - Type        (SINGLE_SELECT: Feature / Chore / Design)
+
+    Returns a dict with the structure needed to update item field values:
+    {
+      "start_date": {"id": "<field_id>", "kind": "date"},
+      "end_date":   {"id": "<field_id>", "kind": "date"},
+      "estimation": {"id": "<field_id>", "kind": "number"},
+      "type": {
+        "id": "<field_id>",
+        "kind": "singleSelect",
+        "options": {"Feature": "<option_id>", "Chore": "<option_id>", "Design": "<option_id>"}
+      },
+    }
+    """
+    step("Step 0b — Setting up Project V2 custom fields")
+
+    data = graphql(session, _GET_PROJECT_FIELDS_QUERY, {"projectId": project_id})
+    if not data:
+        warn("Could not fetch project fields — custom field values will not be set.")
+        return {}
+
+    existing: dict[str, dict] = {}
+    for node in data["node"]["fields"]["nodes"]:
+        if not node:
+            continue
+        name = node.get("name", "")
+        if "options" in node:
+            existing[name] = {
+                "id": node["id"],
+                "kind": "singleSelect",
+                "options": {o["name"]: o["id"] for o in node["options"]},
+            }
+        else:
+            existing[name] = {"id": node["id"], "kind": "date"}  # placeholder kind
+
+    fields_to_create = [
+        ("Start Date", "DATE",          "date"),
+        ("End Date",   "DATE",          "date"),
+        ("Estimation", "NUMBER",        "number"),
+        ("Type",       "SINGLE_SELECT", "singleSelect"),
+    ]
+
+    result: dict[str, dict] = {}
+
+    for field_name, data_type, kind in fields_to_create:
+        json_key = field_name.lower().replace(" ", "_")
+
+        if field_name in existing:
+            info(f'Field already exists: "{field_name}"')
+            entry = existing[field_name]
+            entry["kind"] = kind  # override stored kind with the expected one
+            result[json_key] = entry
+            continue
+
+        variables: dict = {
+            "projectId": project_id,
+            "dataType": data_type,
+            "name": field_name,
+        }
+        if data_type == "SINGLE_SELECT":
+            variables["options"] = [{"name": opt, "color": "GRAY"} for opt in _TYPE_OPTIONS]
+
+        create_data = graphql(session, _CREATE_FIELD_MUTATION, variables)
+        if not create_data:
+            warn(f'Failed to create field "{field_name}"')
+            continue
+
+        created = create_data.get("createProjectV2Field", {}).get("projectV2Field")
+        if not created:
+            warn(f'No field returned when creating "{field_name}"')
+            continue
+
+        entry: dict = {"id": created["id"], "kind": kind}
+        if kind == "singleSelect":
+            entry["options"] = {o["name"]: o["id"] for o in created.get("options", [])}
+
+        result[json_key] = entry
+        ok(f'Created field: "{field_name}"')
+
+    return result
+
+
+def _update_item_fields(
+    session,
+    project_id: str,
+    item_id: str,
+    ticket: dict,
+    fields: dict,
+    issue_number: int,
+) -> None:
+    """Set start_date, end_date, estimation, and type on a project item."""
+    mappings = [
+        ("start_date", ticket.get("start_date")),
+        ("end_date",   ticket.get("end_date")),
+        ("estimation", ticket.get("estimation")),
+        ("type",       ticket.get("type")),
+    ]
+
+    for json_key, value in mappings:
+        if value is None or json_key not in fields:
+            continue
+
+        field = fields[json_key]
+        kind  = field["kind"]
+
+        if kind == "date":
+            gql_value = {"date": value}
+        elif kind == "number":
+            gql_value = {"number": float(value)}
+        elif kind == "singleSelect":
+            option_id = field["options"].get(value)
+            if not option_id:
+                warn(f'Unknown type option "{value}" for issue #{issue_number} — skipping')
+                continue
+            gql_value = {"singleSelectOptionId": option_id}
+        else:
+            continue
+
+        upd = graphql(
+            session,
+            _UPDATE_FIELD_VALUE_MUTATION,
+            {
+                "projectId": project_id,
+                "itemId":    item_id,
+                "fieldId":   field["id"],
+                "value":     gql_value,
+            },
+        )
+        if not upd:
+            warn(f'Could not set "{json_key}" on issue #{issue_number}')
+
 
 def create_issues(
     session,
@@ -384,6 +606,7 @@ def create_issues(
     tickets: list,
     milestone_map: dict,
     project_id: str,
+    fields: dict,
 ) -> None:
     """Create each ticket as a GitHub Issue and link it to the Project V2."""
     step("Step 3 — Creating Issues & Linking to Project V2")
@@ -398,11 +621,15 @@ def create_issues(
         milestone_number = milestone_map.get(local_milestone) if local_milestone else None
         labels           = ticket.get("labels", [])
 
+        assignees = ticket.get("assignees", [])
+
         issue_payload: dict = {"title": title, "body": body}
         if milestone_number:
             issue_payload["milestone"] = milestone_number
         if labels:
             issue_payload["labels"] = labels
+        if assignees:
+            issue_payload["assignees"] = assignees
 
         issue_data = rest_post(session, f"{base_url}/issues", issue_payload)
         if not issue_data:
@@ -425,6 +652,11 @@ def create_issues(
         if gql_data and gql_data.get("addProjectV2ItemById", {}).get("item", {}).get("id"):
             project_item_id = gql_data["addProjectV2ItemById"]["item"]["id"]
             ok(f"Linked to Project V2 (item: {project_item_id})")
+
+            if fields:
+                _update_item_fields(
+                    session, project_id, project_item_id, ticket, fields, issue_number
+                )
         else:
             warn(f"Issue #{issue_number} created but could not be linked to Project V2.")
 
@@ -470,10 +702,11 @@ def main() -> None:
 
     # Step 0: create the Project V2 from scratch.
     project_id = create_project_v2(session, config["REPO_OWNER"], project_name)
+    fields     = setup_project_fields(session, project_id)
 
     milestone_map = sync_milestones(session, base_url, milestones)
     ensure_labels(session, base_url, tickets)
-    create_issues(session, base_url, tickets, milestone_map, project_id)
+    create_issues(session, base_url, tickets, milestone_map, project_id, fields)
 
     print(f"\n{BOLD}{GREEN}{'='*60}")
     print("  Import complete!")
