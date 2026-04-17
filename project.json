@@ -2,7 +2,13 @@
   "project": {
     "name": "happymom-photography",
     "description": "Production-ready booking platform for a newborn & maternity photography studio — Laravel 13 Starter Kit (Inertia + React) · Tailwind CSS · MySQL. Clients browse session categories and packages, submit booking inquiries with preferred dates, and track their booking through to gallery delivery. Tickets follow a vertical-slice philosophy: each ticket cuts through database, backend, and frontend so the learner sees a working result after every task.",
-    "tech_stack": ["Laravel 13", "Inertia.js", "React.js", "Tailwind CSS", "MySQL"],
+    "tech_stack": [
+      "Laravel 13",
+      "Inertia.js",
+      "React.js",
+      "Tailwind CSS",
+      "MySQL"
+    ],
     "starter_kit_provides": [
       "Laravel project initialized with Vite",
       "Inertia.js configured (server + client)",
@@ -20,67 +26,67 @@
   "milestones": [
     {
       "id": "M0",
-      "title": "Foundation — Clean Slate & Project Identity",
+      "title": "M0 - Foundation — Clean Slate & Project Identity",
       "description": "Strip the starter kit boilerplate down to a clean canvas, wire up MySQL, brand the app with the studio's warm aesthetic, and set up the three layout shells (public site, client account, admin panel). After this milestone the app carries HappyMom Photography's identity, has a working database, and all three section skeletons are ready to receive features."
     },
     {
       "id": "M1",
-      "title": "User Roles & Admin Gate",
+      "title": "M1 - User Roles & Admin Gate",
       "description": "Extend the starter kit's user system with roles (client/admin), build the admin middleware, seed an admin account, and verify the whole flow end-to-end: register as a client → can't access /admin, log in as admin → lands on the admin dashboard."
     },
     {
       "id": "M2",
-      "title": "Session Categories (Full Vertical Slice)",
+      "title": "M2 - Session Categories (Full Vertical Slice)",
       "description": "First real feature built through every layer. The learner creates the session_categories table, model, admin CRUD pages, and public category cards — ending with session types visible on the studio site. Complete Lego piece."
     },
     {
       "id": "M3",
-      "title": "Packages (Full Vertical Slice)",
+      "title": "M3 - Packages (Full Vertical Slice)",
       "description": "The core sellable unit. Session packages (e.g. Mini Newborn, Premium Maternity) with pricing, inclusions, and duration. Each ticket is a self-contained slice: create a package → see it in the admin list → see it on the public pricing page → view its detail page with a booking CTA."
     },
     {
       "id": "M4",
-      "title": "Portfolio Gallery (Full Vertical Slice)",
+      "title": "M4 - Portfolio Gallery (Full Vertical Slice)",
       "description": "The studio's visual showcase. Admin uploads portfolio images tagged by session category. Public visitors see a filterable gallery that demonstrates the photographer's work and builds trust before booking."
     },
     {
       "id": "M5",
-      "title": "Booking Flow (Full Vertical Slice)",
+      "title": "M5 - Booking Flow (Full Vertical Slice)",
       "description": "The primary transaction: a client selects a package, chooses preferred session dates, optionally adds extras, and submits a booking inquiry. After this milestone a client can browse → choose a package → submit a booking → see a confirmation page, and the admin sees the new inquiry in the dashboard."
     },
     {
       "id": "M6",
-      "title": "Client Account Dashboard",
+      "title": "M6 - Client Account Dashboard",
       "description": "The authenticated client panel: booking list, booking detail with status timeline, and profile management. Each ticket is a standalone page the learner can visit and test immediately after placing a test booking."
     },
     {
       "id": "M7",
-      "title": "Admin: Bookings & Customers",
+      "title": "M7 - Admin: Bookings & Customers",
       "description": "Admin-side management of booking inquiries (view, confirm date, update status through the full session lifecycle) and clients (list, detail, activate/deactivate). Each ticket produces a working admin page."
     },
     {
       "id": "M8",
-      "title": "Albums, Add-ons & Pricing Page",
+      "title": "M8 - Albums, Add-ons & Pricing Page",
       "description": "Upsell products: physical and digital albums, and individual add-ons (rush editing, extra prints, canvas). Admin manages the catalog; clients can select add-ons when booking. Closes with a comprehensive public pricing page."
     },
     {
       "id": "M9",
-      "title": "Static Pages & Core Content",
+      "title": "M9 - Static Pages & Core Content",
       "description": "Public-facing content pages: Homepage (hero, featured packages, gallery preview, testimonials), About the Studio, Contact form, Services/FAQ. Each ticket is a standalone slice that rounds out the studio's online presence."
     },
     {
       "id": "M10",
-      "title": "Polish, SEO & Security",
+      "title": "M10 - Polish, SEO & Security",
       "description": "Cross-cutting improvements: global toast system, reusable UI components, SEO meta tags, image optimization on upload, security headers, and rate limiting. Each ticket applies retroactively to all earlier features."
     },
     {
       "id": "M11",
-      "title": "Email Notifications",
+      "title": "M11 - Email Notifications",
       "description": "Transactional emails: booking inquiry confirmation, status updates (confirmed, session complete, gallery ready, cancellation), and welcome email. Each ticket is a standalone mailable the learner can trigger and preview in Mailtrap."
     },
     {
       "id": "M12",
-      "title": "Testing & Deployment",
+      "title": "M12 - Testing & Deployment",
       "description": "Automated tests covering auth, packages, booking flow, and authorization, plus the production deploy script. Each ticket is a test suite the learner runs and sees green, or a deployment artifact ready to use."
     }
   ],
@@ -89,7 +95,10 @@
       "id": "T-001",
       "title": "Remove starter kit boilerplate & set project identity",
       "milestone": "M0",
-      "labels": ["setup", "foundation"],
+      "labels": [
+        "setup",
+        "foundation"
+      ],
       "priority": "critical",
       "depends_on": [],
       "description": "The Laravel starter kit ships with example pages, placeholder content, and demo components. Clean it up and brand it as HappyMom Photography.",
@@ -114,15 +123,24 @@
         "Understanding Laravel starter kit structure",
         "Identifying what to keep vs. remove when starting a new project",
         "First contact with Inertia page components"
-      ]
+      ],
+      "start_date": "2026-04-17",
+      "end_date": "2026-04-19",
+      "type": "Chore",
+      "estimation": 5
     },
     {
       "id": "T-002",
       "title": "Switch from SQLite to MySQL",
       "milestone": "M0",
-      "labels": ["setup", "database"],
+      "labels": [
+        "setup",
+        "database"
+      ],
       "priority": "critical",
-      "depends_on": ["T-001"],
+      "depends_on": [
+        "T-001"
+      ],
       "description": "The starter kit defaults to SQLite. Switch to MySQL for production readiness. Create the database, update config, and verify all existing migrations still work.",
       "tasks": [
         "Create MySQL database `happymom_photography`",
@@ -141,15 +159,25 @@
         "Laravel database configuration",
         "Understanding migrations as the source of truth for schema",
         "Switching database drivers without touching migration files"
-      ]
+      ],
+      "start_date": "2026-04-20",
+      "end_date": "2026-04-21",
+      "type": "Chore",
+      "estimation": 3
     },
     {
       "id": "T-003",
       "title": "Brand the app: Tailwind theme, fonts & colors",
       "milestone": "M0",
-      "labels": ["setup", "frontend", "design"],
+      "labels": [
+        "setup",
+        "frontend",
+        "design"
+      ],
       "priority": "high",
-      "depends_on": ["T-001"],
+      "depends_on": [
+        "T-001"
+      ],
       "description": "Customize the Tailwind config for HappyMom Photography's brand identity — soft, warm, and emotive. This is the visual foundation everything else builds on.",
       "tasks": [
         "Define brand color palette in `tailwind.config.js`: blush rose as primary, warm cream as background, soft gold as accent, deep charcoal as text",
@@ -168,15 +196,24 @@
         "Tailwind CSS configuration and design tokens",
         "Google Fonts integration in Laravel/Vite projects",
         "Building a cohesive brand palette as a shared foundation"
-      ]
+      ],
+      "start_date": "2026-04-20",
+      "end_date": "2026-04-22",
+      "type": "Design",
+      "estimation": 3
     },
     {
       "id": "T-004",
       "title": "Set up route structure & admin route file",
       "milestone": "M0",
-      "labels": ["setup", "backend"],
+      "labels": [
+        "setup",
+        "backend"
+      ],
       "priority": "high",
-      "depends_on": ["T-001"],
+      "depends_on": [
+        "T-001"
+      ],
       "description": "Organize routes into three clear groups: public studio pages, client account, and admin panel. Add the admin route group alongside the starter kit's existing route files.",
       "tasks": [
         "Create `routes/admin.php`",
@@ -196,15 +233,25 @@
         "Laravel routing: route groups, prefixes, and multiple route files",
         "Middleware basics and where to apply it",
         "Using `php artisan route:list` to debug route registration"
-      ]
+      ],
+      "start_date": "2026-04-22",
+      "end_date": "2026-04-23",
+      "type": "Chore",
+      "estimation": 3
     },
     {
       "id": "T-005",
       "title": "Create AdminLayout with sidebar and render admin dashboard",
       "milestone": "M0",
-      "labels": ["frontend", "fullstack"],
+      "labels": [
+        "frontend",
+        "fullstack"
+      ],
       "priority": "high",
-      "depends_on": ["T-003", "T-004"],
+      "depends_on": [
+        "T-003",
+        "T-004"
+      ],
       "description": "Build the AdminLayout component and wire it to the admin dashboard route. After this ticket, navigating to /admin shows a branded admin shell with a sidebar — the first visible result of the admin section.",
       "tasks": [
         "Create `resources/js/Layouts/AdminLayout.jsx` with sidebar + top bar + main content area",
@@ -226,15 +273,24 @@
         "Inertia shared props with `usePage()`",
         "Responsive sidebar pattern with Tailwind",
         "Separating admin and public layout concerns"
-      ]
+      ],
+      "start_date": "2026-04-24",
+      "end_date": "2026-04-26",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-006",
       "title": "Extend GuestLayout into a studio website shell with navbar & footer",
       "milestone": "M0",
-      "labels": ["frontend", "fullstack"],
+      "labels": [
+        "frontend",
+        "fullstack"
+      ],
       "priority": "high",
-      "depends_on": ["T-003"],
+      "depends_on": [
+        "T-003"
+      ],
       "description": "The starter kit's GuestLayout is a minimal centered card for auth forms. Extend it into a full photography studio site layout with navbar and footer, while keeping auth pages looking correct.",
       "tasks": [
         "Add a public navbar: studio logo/wordmark ('HappyMom Photography'), nav links (Home, Portfolio, Packages, About, Contact), auth links (Login / Book Now or user dropdown when logged in)",
@@ -255,15 +311,24 @@
         "React props for layout variants",
         "Responsive sticky navigation with Tailwind",
         "Thinking ahead about layout variants (public vs auth)"
-      ]
+      ],
+      "start_date": "2026-04-23",
+      "end_date": "2026-04-25",
+      "type": "Design",
+      "estimation": 3
     },
     {
       "id": "T-007",
       "title": "Set up Git repo, branching strategy & push to GitHub",
       "milestone": "M0",
-      "labels": ["setup", "devops"],
+      "labels": [
+        "setup",
+        "devops"
+      ],
       "priority": "high",
-      "depends_on": ["T-001"],
+      "depends_on": [
+        "T-001"
+      ],
       "description": "Initialize version control and establish the workflow the learner will use for every future ticket.",
       "tasks": [
         "Initialize Git repo (if not already done by starter kit)",
@@ -285,15 +350,26 @@
         "Git workflow and branch protection rules",
         "GitHub repository setup",
         "Professional branching strategy for solo and team projects"
-      ]
+      ],
+      "start_date": "2026-04-20",
+      "end_date": "2026-04-21",
+      "type": "Chore",
+      "estimation": 5
     },
     {
       "id": "T-008",
       "title": "Add roles to users: migration, model update, admin seeder — verify in browser",
       "milestone": "M1",
-      "labels": ["fullstack", "database", "backend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-002", "T-005"],
+      "depends_on": [
+        "T-002",
+        "T-005"
+      ],
       "description": "Extend the existing user system with roles. One ticket, full stack, working result: write the migration, update the model, seed an admin user, log in as admin, and see the admin dashboard.",
       "tasks": [
         "Create a NEW migration (never modify the starter kit's original): add `phone` (nullable string), `role` (enum: client/admin, default client), `is_active` (boolean, default true) to `users` table",
@@ -318,15 +394,24 @@
         "Eloquent model customization: fillable, casts, scopes, helpers",
         "Database seeders and idempotency with firstOrCreate",
         "Enum columns in MySQL"
-      ]
+      ],
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-29",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-009",
       "title": "Admin middleware & role-based login redirect — full protection working",
       "milestone": "M1",
-      "labels": ["backend", "fullstack"],
+      "labels": [
+        "backend",
+        "fullstack"
+      ],
       "priority": "critical",
-      "depends_on": ["T-008"],
+      "depends_on": [
+        "T-008"
+      ],
       "description": "Build the admin gate and make login smarter. After this ticket: clients can't access /admin (403), admins land on /admin after login, clients land on the homepage. Testable immediately in the browser.",
       "tasks": [
         "Create `app/Http/Middleware/EnsureUserIsAdmin.php` — check `$user->isAdmin()`, abort 403 if not",
@@ -349,15 +434,25 @@
         "Route middleware groups and aliases",
         "Authentication redirects based on user role",
         "HTTP 403 responses"
-      ]
+      ],
+      "start_date": "2026-04-30",
+      "end_date": "2026-05-01",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-010",
       "title": "Restyle auth pages & add phone to registration — branded auth flow",
       "milestone": "M1",
-      "labels": ["frontend", "fullstack"],
+      "labels": [
+        "frontend",
+        "fullstack"
+      ],
       "priority": "medium",
-      "depends_on": ["T-003", "T-008"],
+      "depends_on": [
+        "T-003",
+        "T-008"
+      ],
       "description": "Restyle all four auth pages to match the HappyMom Photography brand and add a phone field to registration. After this ticket: the auth flow looks professional and captures phone numbers for booking contact.",
       "tasks": [
         "Restyle Login page: brand colors, studio logo/wordmark above the form, styled inputs and buttons, soft background",
@@ -379,15 +474,24 @@
         "Modifying starter kit auth controllers safely",
         "Form validation rules in Laravel (nullable fields)",
         "Extending existing registration forms"
-      ]
+      ],
+      "start_date": "2026-04-30",
+      "end_date": "2026-05-02",
+      "type": "Design",
+      "estimation": 3
     },
     {
       "id": "T-011",
       "title": "Move profile page to /account/profile & add phone field",
       "milestone": "M1",
-      "labels": ["fullstack"],
+      "labels": [
+        "fullstack"
+      ],
       "priority": "medium",
-      "depends_on": ["T-008", "T-010"],
+      "depends_on": [
+        "T-008",
+        "T-010"
+      ],
       "description": "Customize the starter kit's profile page: move it to the client panel URL, add the phone field, and restyle. After this ticket: clients can edit their profile including phone at /account/profile.",
       "tasks": [
         "Update route: change `/profile` to `/account/profile`",
@@ -408,15 +512,27 @@
         "Modifying starter kit routes without breaking auth flows",
         "Extending existing controllers",
         "Route naming conventions for user panels"
-      ]
+      ],
+      "start_date": "2026-05-03",
+      "end_date": "2026-05-04",
+      "type": "Feature",
+      "estimation": 2
     },
     {
       "id": "T-012",
       "title": "Session categories: migration + model + admin create form + admin list page",
       "milestone": "M2",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-005", "T-009"],
+      "depends_on": [
+        "T-005",
+        "T-009"
+      ],
       "description": "First real feature vertical slice! Build the session_categories table, model, admin create form, and admin list page in ONE ticket. After this ticket: the admin can create a session category (e.g. 'Newborn', 'Maternity') via a form and see it in a table.",
       "tasks": [
         "Create `session_categories` migration: id, name, slug (unique), description (nullable), cover_image (nullable), is_active (boolean default true), sort_order (integer default 0), timestamps",
@@ -445,15 +561,25 @@
         "Inertia useForm hook for form state and submission",
         "File upload handling in Laravel",
         "Flash messages with Inertia"
-      ]
+      ],
+      "start_date": "2026-05-05",
+      "end_date": "2026-05-08",
+      "type": "Feature",
+      "estimation": 8
     },
     {
       "id": "T-013",
       "title": "Session categories: edit, update & delete",
       "milestone": "M2",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-012"],
+      "depends_on": [
+        "T-012"
+      ],
       "description": "Complete the session category CRUD. After this ticket: admin can edit any category's details, replace its cover image, and delete categories that have no packages attached.",
       "tasks": [
         "Add `edit` and `update` methods to `AdminCategoryController`",
@@ -477,15 +603,26 @@
         "PUT requests via Inertia",
         "Conditional deletion logic using relationship count",
         "Confirmation modals in React"
-      ]
+      ],
+      "start_date": "2026-05-09",
+      "end_date": "2026-05-11",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-014",
       "title": "Category seeder & public category showcase",
       "milestone": "M2",
-      "labels": ["fullstack", "database", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-006", "T-012"],
+      "depends_on": [
+        "T-006",
+        "T-012"
+      ],
       "description": "Seed realistic session categories and display them on the public studio site. After this ticket: an 'Our Sessions' section appears on the homepage and /portfolio/{slug} shows the category landing page.",
       "tasks": [
         "Create `SessionCategorySeeder`: seed 5 categories — Newborn, Maternity, Sitter & Cake Smash, Family Portraits, Motherhood — with descriptions and photography-appropriate slugs",
@@ -510,15 +647,26 @@
         "Public controllers vs. admin controllers",
         "Route model binding with custom slugs",
         "Linking seeded DB data to the frontend display"
-      ]
+      ],
+      "start_date": "2026-05-09",
+      "end_date": "2026-05-11",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-015",
       "title": "Packages: migration + model + admin create form (all fields) + admin list page",
       "milestone": "M3",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-012"],
+      "depends_on": [
+        "T-012"
+      ],
       "description": "The core sellable unit. Create the packages table, model, and admin interface to create and list packages. After this ticket: admin can create a package (e.g. 'Mini Newborn Session — €250') with all details and see it in a paginated list.",
       "tasks": [
         "Create `packages` migration: id, session_category_id (FK), name, slug (unique), tagline (nullable string), description (text), price (decimal 10,2), duration_minutes (integer), photo_count (integer), outfit_changes (integer default 0), inclusions (JSON — array of strings), is_active (boolean default true), is_featured (boolean default false), sort_order (integer default 0), timestamps, soft_deletes",
@@ -544,15 +692,25 @@
         "Eloquent model casts for arrays and decimals",
         "Dynamic list inputs in React (add/remove inclusions)",
         "Server-side filtering and pagination with Inertia"
-      ]
+      ],
+      "start_date": "2026-05-12",
+      "end_date": "2026-05-16",
+      "type": "Feature",
+      "estimation": 8
     },
     {
       "id": "T-016",
       "title": "Packages: edit form + soft delete",
       "milestone": "M3",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-015"],
+      "depends_on": [
+        "T-015"
+      ],
       "description": "Complete package management. After this ticket: admin can edit any package (all fields including the dynamic inclusions list) and soft-delete packages.",
       "tasks": [
         "Add `edit`, `update`, and `destroy` methods to `AdminPackageController`",
@@ -575,15 +733,25 @@
         "Soft deletes in Laravel (SoftDeletes trait, deleted_at)",
         "PUT requests with complex nested payloads",
         "Pre-populating dynamic list components from DB data"
-      ]
+      ],
+      "start_date": "2026-05-17",
+      "end_date": "2026-05-19",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-017",
       "title": "Package seeder & factory with realistic photography data",
       "milestone": "M3",
-      "labels": ["database", "backend"],
+      "labels": [
+        "database",
+        "backend"
+      ],
       "priority": "high",
-      "depends_on": ["T-014", "T-015"],
+      "depends_on": [
+        "T-014",
+        "T-015"
+      ],
       "description": "Seed the packages with realistic data so all subsequent public-facing tickets have content to display.",
       "tasks": [
         "Create `PackageFactory` with realistic photography data: names like 'Mini Newborn Session', 'Premium Maternity', 'Sitter Deluxe'; prices €150–€600; durations 60–240 minutes; photo counts 10–60",
@@ -605,15 +773,25 @@
         "Factory relationships (package belongs to category)",
         "Seeder ordering and dependencies",
         "Database refresh workflow for development"
-      ]
+      ],
+      "start_date": "2026-05-17",
+      "end_date": "2026-05-18",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-018",
       "title": "Admin dashboard with real stats from DB",
       "milestone": "M3",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-017"],
+      "depends_on": [
+        "T-017"
+      ],
       "description": "Make the admin dashboard useful. After this ticket: the admin dashboard shows real counts — total packages, session categories, registered clients — pulled from the database.",
       "tasks": [
         "Create `AdminDashboardController@index` — query: total packages, total categories, total clients, pending inquiries (0 placeholder for now), upcoming confirmed sessions (0 placeholder for now)",
@@ -633,15 +811,27 @@
         "Passing computed data via Inertia props",
         "Dashboard stat card UI pattern",
         "Query efficiency awareness"
-      ]
+      ],
+      "start_date": "2026-05-19",
+      "end_date": "2026-05-20",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-019",
       "title": "Portfolio gallery: migration + model + admin image upload + admin list",
       "milestone": "M4",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-005", "T-009"],
+      "depends_on": [
+        "T-005",
+        "T-009"
+      ],
       "description": "Build the portfolio gallery management. After this ticket: the admin can upload portfolio images, tag them by session category, and see them in a grid. This is the studio's primary trust-building asset.",
       "tasks": [
         "Create `gallery_images` migration: id, session_category_id (nullable FK), title (nullable), image_path, alt_text (nullable), caption (nullable), is_featured (boolean default false), sort_order (integer default 0), timestamps",
@@ -665,15 +855,26 @@
         "Nullable foreign keys and optional relationships",
         "Image grid admin UI with filter",
         "Drag-and-drop file input in React"
-      ]
+      ],
+      "start_date": "2026-05-12",
+      "end_date": "2026-05-15",
+      "type": "Feature",
+      "estimation": 8
     },
     {
       "id": "T-020",
       "title": "Portfolio gallery: public page with category filter",
       "milestone": "M4",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-014", "T-019"],
+      "depends_on": [
+        "T-014",
+        "T-019"
+      ],
       "description": "Build the public portfolio page. After this ticket: visitors can browse the studio's full portfolio in a beautiful grid and filter by session type.",
       "tasks": [
         "Create `GalleryController@index` — return active gallery images with eager-loaded categories, optionally filtered by category slug from query param",
@@ -697,15 +898,26 @@
         "Filter tabs with Inertia router.visit and query params",
         "Hover effects in React/CSS",
         "Reusing a page across two different routes"
-      ]
+      ],
+      "start_date": "2026-05-19",
+      "end_date": "2026-05-21",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-021",
       "title": "Package detail page: gallery preview, inclusions, and booking CTA",
       "milestone": "M4",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-015", "T-019"],
+      "depends_on": [
+        "T-015",
+        "T-019"
+      ],
       "description": "Build the single package detail page. After this ticket: clicking a package leads to a full detail page with inclusions checklist, sample gallery images from the same category, and a 'Book This Session' CTA.",
       "tasks": [
         "Create `PackageController@show` — find by slug, eager-load sessionCategory with up to 6 featured gallery images. Abort 404 if inactive/missing",
@@ -728,15 +940,26 @@
         "Eager loading nested relationships (category → gallery images)",
         "Inclusions checklist UI",
         "SEO with Inertia Head component"
-      ]
+      ],
+      "start_date": "2026-05-22",
+      "end_date": "2026-05-24",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-022",
       "title": "Booking inquiry: tables + models + service + form + confirmation (full vertical slice)",
       "milestone": "M5",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-021"],
+      "depends_on": [
+        "T-021"
+      ],
       "description": "The primary transaction of the app. Build the entire booking inquiry flow in ONE ticket. After this ticket: a logged-in client selects a package, fills in session details, submits the booking, and lands on a confirmation page. The admin dashboard pending count increments.",
       "tasks": [
         "Create `bookings` migration: id, user_id (FK), package_id (FK), booking_number (unique), status (enum: inquiry/confirmed/session_completed/editing/gallery_ready/cancelled, default inquiry), preferred_date_1 (date), preferred_date_2 (date nullable), confirmed_date (date nullable), session_location (string nullable), baby_due_date (date nullable), baby_birth_date (date nullable), special_requests (text nullable), subtotal (decimal 10,2), total (decimal 10,2), admin_notes (text nullable), timestamps",
@@ -768,15 +991,26 @@
         "DB transactions for data integrity",
         "Booking/order number generation pattern",
         "Redirecting guests to login and back (intended URL)"
-      ]
+      ],
+      "start_date": "2026-05-25",
+      "end_date": "2026-05-29",
+      "type": "Feature",
+      "estimation": 8
     },
     {
       "id": "T-023",
       "title": "Add-ons selection in the booking inquiry form",
       "milestone": "M5",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-022", "T-032"],
+      "depends_on": [
+        "T-022",
+        "T-032"
+      ],
       "description": "Extend the booking inquiry form to include optional add-on selection. After this ticket: clients can add extras (rush editing, canvas print, etc.) before submitting their inquiry.",
       "tasks": [
         "Create `booking_addons` migration: id, booking_id (FK cascade), addon_id (FK), quantity (integer default 1), unit_price (decimal 10,2), line_total (decimal 10,2), timestamps",
@@ -801,15 +1035,26 @@
         "Price snapshot pattern (why you store price at booking time)",
         "Checkbox card UI component",
         "Dynamic total calculation in React"
-      ]
+      ],
+      "start_date": "2026-05-30",
+      "end_date": "2026-06-01",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-024",
       "title": "Customer dashboard: account overview with upcoming bookings",
       "milestone": "M6",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-011", "T-022"],
+      "depends_on": [
+        "T-011",
+        "T-022"
+      ],
       "description": "Build the client account dashboard. After this ticket: logged-in clients see their account overview with upcoming bookings and quick stats at /account.",
       "tasks": [
         "Create `AccountController@index` — pass: user info, upcoming bookings (confirmed date in future or all recent, limit 3, with package name), total bookings count, pending inquiry count",
@@ -831,15 +1076,25 @@
         "Sub-navigation component for account panels",
         "Displaying conditional data (confirmed date vs. pending)",
         "Layout composition with nested navigation"
-      ]
+      ],
+      "start_date": "2026-05-30",
+      "end_date": "2026-06-01",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-025",
       "title": "My Bookings: list page with status badges and pagination",
       "milestone": "M6",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-024"],
+      "depends_on": [
+        "T-024"
+      ],
       "description": "Build the bookings list in the client panel. After this ticket: clients see all their bookings in a paginated table with color-coded status badges.",
       "tasks": [
         "Create `AccountBookingController@index` — return current user's bookings paginated (10/page), with package name eager-loaded",
@@ -861,15 +1116,25 @@
         "Status badge color mapping in React",
         "Reusing the pagination component",
         "Empty state UI pattern"
-      ]
+      ],
+      "start_date": "2026-06-02",
+      "end_date": "2026-06-03",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-026",
       "title": "My Bookings: booking detail page with status timeline",
       "milestone": "M6",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-025"],
+      "depends_on": [
+        "T-025"
+      ],
       "description": "Build the booking detail view for clients. After this ticket: clients can view full booking details with a visual status timeline showing where they are in the session journey.",
       "tasks": [
         "Create `AccountBookingController@show` — find booking by ID, verify it belongs to current user (403 otherwise), eager-load package and add-ons with addon details",
@@ -892,15 +1157,25 @@
         "Multi-step status timeline UI component",
         "Conditional rendering based on booking status",
         "Presenting business process flow visually to end users"
-      ]
+      ],
+      "start_date": "2026-06-04",
+      "end_date": "2026-06-06",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-027",
       "title": "Admin: bookings list with filters and sorting",
       "milestone": "M7",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-022"],
+      "depends_on": [
+        "T-022"
+      ],
       "description": "Build the admin bookings management page. After this ticket: admins see all booking inquiries across all clients, filterable by status and sortable by date.",
       "tasks": [
         "Create `AdminBookingController@index` — return all bookings with client name and package name eager-loaded, paginated (20/page). Accept filters: status, preferred date range. Accept sort: submission date, preferred date 1",
@@ -923,15 +1198,26 @@
         "Sortable columns with Inertia query params",
         "Date range filtering in Eloquent",
         "Linking dashboard stats to filtered list views"
-      ]
+      ],
+      "start_date": "2026-05-30",
+      "end_date": "2026-06-01",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-028",
       "title": "Admin: booking detail page with status update & history",
       "milestone": "M7",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-027"],
+      "depends_on": [
+        "T-027"
+      ],
       "description": "Build the admin booking detail view with full status management. After this ticket: admins can view all booking details, set the confirmed session date, update status through the lifecycle, add notes, and see a history of every change.",
       "tasks": [
         "Create `booking_status_histories` migration: id, booking_id (FK), old_status, new_status, changed_by (user_id FK), notes (nullable), timestamps",
@@ -956,15 +1242,25 @@
         "Audit trail pattern (status history table)",
         "Conditional form fields based on selected action",
         "PATCH requests for partial resource updates"
-      ]
+      ],
+      "start_date": "2026-06-02",
+      "end_date": "2026-06-05",
+      "type": "Feature",
+      "estimation": 8
     },
     {
       "id": "T-029",
       "title": "Admin: customer list with booking aggregates",
       "milestone": "M7",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-022"],
+      "depends_on": [
+        "T-022"
+      ],
       "description": "Build the admin customer management page. After this ticket: admins see all clients with booking counts and total spent, searchable by name or email.",
       "tasks": [
         "Create `AdminUserController@index` — return users (role=client) with aggregates (bookings_count, total_spent) computed at DB level, paginated. Accept search param (name or email)",
@@ -984,15 +1280,25 @@
         "Eloquent `withCount` and `withSum` for DB-level aggregates",
         "Efficient aggregate queries vs. loading all records",
         "Admin customer management patterns"
-      ]
+      ],
+      "start_date": "2026-05-30",
+      "end_date": "2026-05-31",
+      "type": "Feature",
+      "estimation": 2
     },
     {
       "id": "T-030",
       "title": "Admin: customer detail page with activate/deactivate",
       "milestone": "M7",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-029"],
+      "depends_on": [
+        "T-029"
+      ],
       "description": "Build the admin customer detail view. After this ticket: admins can view a client's full profile, booking history, and toggle their active status.",
       "tasks": [
         "Create `AdminUserController@show` — client info + booking history (with package names) + total spent",
@@ -1013,15 +1319,27 @@
         "Active/inactive user pattern and where to enforce it",
         "Blocking login for deactivated users",
         "Admin detail pages composing multiple related data sources"
-      ]
+      ],
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-02",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-031",
       "title": "Albums: migration + model + admin CRUD + public display",
       "milestone": "M8",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-005", "T-009"],
+      "depends_on": [
+        "T-005",
+        "T-009"
+      ],
       "description": "Build the albums feature. Albums are physical or digital photo products (e.g., 'Lay-Flat Photo Book 20x20', 'Digital Gallery USB') clients can purchase alongside their session. After this ticket: admin manages albums and they appear on the public site.",
       "tasks": [
         "Create `albums` migration: id, name, slug (unique), description, price (decimal 10,2), type (enum: digital/physical), cover_image (nullable), specs (JSON nullable — e.g., size, page count, finish), is_active (boolean default true), sort_order (integer default 0), timestamps",
@@ -1045,15 +1363,27 @@
         "Enum types for product categorization",
         "Full CRUD as a standalone feature",
         "Public vs. admin views of the same data"
-      ]
+      ],
+      "start_date": "2026-05-05",
+      "end_date": "2026-05-08",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-032",
       "title": "Add-ons: migration + model + admin CRUD",
       "milestone": "M8",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-005", "T-009"],
+      "depends_on": [
+        "T-005",
+        "T-009"
+      ],
       "description": "Build the add-ons catalog. Add-ons are extras a client attaches to their booking inquiry (e.g., 'Rush Editing — 48hr delivery', 'Extra 10 Edited Photos', 'Canvas Print 30x30'). After this ticket: admin manages the add-ons catalog.",
       "tasks": [
         "Create `addons` migration: id, name, slug (unique), description, price (decimal 10,2), is_active (boolean default true), sort_order (integer default 0), timestamps",
@@ -1076,15 +1406,26 @@
         "Simple admin CRUD as a complete standalone feature",
         "Connecting features across tickets via active/inactive state",
         "Seeding required reference data alongside the feature"
-      ]
+      ],
+      "start_date": "2026-05-05",
+      "end_date": "2026-05-07",
+      "type": "Feature",
+      "estimation": 5
     },
     {
       "id": "T-033",
       "title": "Public pricing page: all packages grouped by category with add-ons section",
       "milestone": "M8",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-017", "T-032"],
+      "depends_on": [
+        "T-017",
+        "T-032"
+      ],
       "description": "Build the comprehensive public pricing page. After this ticket: visitors see all packages grouped by session category with full inclusions, featured badges, and a list of available add-ons. This is the main conversion page.",
       "tasks": [
         "Create `PackagesController@index` — return all active packages grouped by session category (eager-load categories), and all active add-ons",
@@ -1106,15 +1447,27 @@
         "Pricing page design patterns for service businesses",
         "Connecting the pricing page directly to the booking flow",
         "Featured item highlighting"
-      ]
+      ],
+      "start_date": "2026-05-22",
+      "end_date": "2026-05-24",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-034",
       "title": "Homepage: hero, featured packages, gallery preview & testimonials",
       "milestone": "M9",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "critical",
-      "depends_on": ["T-014", "T-020", "T-017"],
+      "depends_on": [
+        "T-014",
+        "T-020",
+        "T-017"
+      ],
       "description": "Build the real homepage. After this ticket: the studio's landing page has a hero, featured packages preview, gallery teaser, and testimonials. It feels like a real photography studio's website.",
       "tasks": [
         "Update `HomeController@index`: pass featured packages (is_featured, active, with category, limit 3), active session categories (limit 5), featured gallery images (is_featured, limit 8)",
@@ -1135,15 +1488,23 @@
         "Hero section design for service businesses",
         "Performance: eager loading and query efficiency",
         "CTA placement strategy for conversion"
-      ]
+      ],
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-12",
+      "type": "Design",
+      "estimation": 3
     },
     {
       "id": "T-035",
       "title": "About the Studio page",
       "milestone": "M9",
-      "labels": ["frontend"],
+      "labels": [
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-006"],
+      "depends_on": [
+        "T-006"
+      ],
       "description": "Build the static About page. After this ticket: visitors can read about the photographer, the studio's story, and approach. Standalone frontend ticket — no backend needed.",
       "tasks": [
         "Create React page `Pages/About.jsx` using GuestLayout",
@@ -1163,15 +1524,26 @@
         "Static content pages with Inertia (no backend round-trip needed)",
         "Content-focused page layout for service businesses",
         "Pure frontend ticket — understanding when no controller is needed"
-      ]
+      ],
+      "start_date": "2026-05-26",
+      "end_date": "2026-05-27",
+      "type": "Design",
+      "estimation": 2
     },
     {
       "id": "T-036",
       "title": "Contact page with form, validation, and DB storage",
       "milestone": "M9",
-      "labels": ["fullstack", "database", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "database",
+        "backend",
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-006"],
+      "depends_on": [
+        "T-006"
+      ],
       "description": "Build the contact page with a working form. After this ticket: prospective clients can send a message that gets stored in the database. Full vertical slice.",
       "tasks": [
         "Create `contact_messages` migration: id, name, email, phone (nullable), subject, message (text), is_read (boolean default false), timestamps",
@@ -1196,15 +1568,25 @@
         "Inline validation error display with Inertia",
         "Connecting a public feature to the admin dashboard count",
         "Contact form pattern for service businesses"
-      ]
+      ],
+      "start_date": "2026-06-03",
+      "end_date": "2026-06-05",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-037",
       "title": "Admin: contact messages inbox",
       "milestone": "M9",
-      "labels": ["fullstack", "backend", "frontend"],
+      "labels": [
+        "fullstack",
+        "backend",
+        "frontend"
+      ],
       "priority": "low",
-      "depends_on": ["T-036"],
+      "depends_on": [
+        "T-036"
+      ],
       "description": "Build the admin contact messages inbox. After this ticket: admins can read contact form submissions and mark them as read.",
       "tasks": [
         "Create `AdminMessageController@index` — paginated list of messages, newest first, unread ones visually highlighted",
@@ -1227,15 +1609,23 @@
         "Read/unread pattern (auto-mark on view)",
         "Badge counts on navigation items",
         "Simple inbox UI pattern for admin panels"
-      ]
+      ],
+      "start_date": "2026-06-06",
+      "end_date": "2026-06-07",
+      "type": "Feature",
+      "estimation": 2
     },
     {
       "id": "T-038",
       "title": "Services & FAQ public page",
       "milestone": "M9",
-      "labels": ["frontend"],
+      "labels": [
+        "frontend"
+      ],
       "priority": "low",
-      "depends_on": ["T-006"],
+      "depends_on": [
+        "T-006"
+      ],
       "description": "Build a static Services and FAQ page. After this ticket: prospective clients can learn about the session process and get answers to common questions.",
       "tasks": [
         "Create React page `Pages/Services.jsx` using GuestLayout",
@@ -1255,15 +1645,24 @@
         "Accordion UI component in React using local state",
         "Static service/FAQ pages for professional websites",
         "When to use local state vs. no state at all"
-      ]
+      ],
+      "start_date": "2026-06-06",
+      "end_date": "2026-06-07",
+      "type": "Design",
+      "estimation": 2
     },
     {
       "id": "T-039",
       "title": "Flash/toast notification system",
       "milestone": "M10",
-      "labels": ["fullstack", "frontend"],
+      "labels": [
+        "fullstack",
+        "frontend"
+      ],
       "priority": "high",
-      "depends_on": ["T-005"],
+      "depends_on": [
+        "T-005"
+      ],
       "description": "Build a global toast notification system. After this ticket: all flash messages across the app display as dismissible toasts. This retroactively improves every earlier feature.",
       "tasks": [
         "Create `ToastNotification.jsx` component: appears top-right, auto-dismiss after 5s, manually dismissible via X, types: success (green), error (red), warning (yellow), info (blue)",
@@ -1285,15 +1684,23 @@
         "Inertia shared data as a cross-cutting concern",
         "Toast/notification UX pattern",
         "Custom React hooks for shared behavior"
-      ]
+      ],
+      "start_date": "2026-06-13",
+      "end_date": "2026-06-15",
+      "type": "Feature",
+      "estimation": 3
     },
     {
       "id": "T-040",
       "title": "Reusable form input components library",
       "milestone": "M10",
-      "labels": ["frontend"],
+      "labels": [
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-003"],
+      "depends_on": [
+        "T-003"
+      ],
       "description": "Extract and standardize form input components. After this ticket: all forms across the app use consistent, accessible, branded input components.",
       "tasks": [
         "Create `TextInput.jsx`: label, placeholder, error display below input, required indicator",
@@ -1318,15 +1725,23 @@
         "Consistent form patterns across a multi-page app",
         "Accessibility: labels, htmlFor, ARIA",
         "DRY principle applied retroactively without breaking things"
-      ]
+      ],
+      "start_date": "2026-06-13",
+      "end_date": "2026-06-15",
+      "type": "Design",
+      "estimation": 3
     },
     {
       "id": "T-041",
       "title": "Confirmation modal & empty state reusable components",
       "milestone": "M10",
-      "labels": ["frontend"],
+      "labels": [
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-003"],
+      "depends_on": [
+        "T-003"
+      ],
       "description": "Extract confirmation modals and empty states into reusable components. After this ticket: all delete confirmations and empty states across the app are visually consistent.",
       "tasks": [
         "Create `ConfirmModal.jsx`: props (title, message, confirmLabel, cancelLabel, onConfirm, variant: danger/warning). Focus trap, ESC to close, backdrop click to close",
@@ -1346,15 +1761,25 @@
         "Accessible modal patterns in React",
         "Focus trap implementation",
         "Retroactive component extraction without regression"
-      ]
+      ],
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-17",
+      "type": "Design",
+      "estimation": 2
     },
     {
       "id": "T-042",
       "title": "SEO meta tags with Inertia Head",
       "milestone": "M10",
-      "labels": ["fullstack", "frontend"],
+      "labels": [
+        "fullstack",
+        "frontend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-034", "T-021"],
+      "depends_on": [
+        "T-034",
+        "T-021"
+      ],
       "description": "Add proper SEO meta tags to all public pages. After this ticket: every public page has a unique title, meta description, and Open Graph tags for social sharing.",
       "tasks": [
         "Create a `useSeo({ title, description, image })` custom hook that renders Inertia `<Head>` with title, meta description, og:title, og:description, og:image, og:type",
@@ -1374,15 +1799,23 @@
         "Inertia Head component",
         "Custom React hooks",
         "Open Graph protocol for social sharing previews"
-      ]
+      ],
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-17",
+      "type": "Feature",
+      "estimation": 2
     },
     {
       "id": "T-043",
       "title": "Image optimization on upload",
       "milestone": "M10",
-      "labels": ["backend"],
+      "labels": [
+        "backend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-019"],
+      "depends_on": [
+        "T-019"
+      ],
       "description": "Automatically optimize images when uploaded. After this ticket: all gallery and cover images are resized, compressed, and have thumbnails generated — reducing storage and improving page load speed.",
       "tasks": [
         "Install Intervention Image library (`intervention/image`)",
@@ -1404,15 +1837,24 @@
         "Service pattern for cross-cutting upload logic",
         "Thumbnail generation strategy",
         "Storage optimization for media-heavy applications"
-      ]
+      ],
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-17",
+      "type": "Chore",
+      "estimation": 2
     },
     {
       "id": "T-044",
       "title": "Security headers & rate limiting on sensitive endpoints",
       "milestone": "M10",
-      "labels": ["backend", "security"],
+      "labels": [
+        "backend",
+        "security"
+      ],
       "priority": "high",
-      "depends_on": ["T-004"],
+      "depends_on": [
+        "T-004"
+      ],
       "description": "Harden the app with security headers and protect sensitive endpoints from abuse. After this ticket: the app has production-grade security headers and rate limiting on auth and booking routes.",
       "tasks": [
         "Verify CSRF protection is active for all Inertia POST/PUT/DELETE requests (starter kit should handle this — confirm with a manual test)",
@@ -1434,15 +1876,23 @@
         "CSRF protection in Inertia apps",
         "Laravel throttle middleware",
         "Mass assignment protection in Eloquent"
-      ]
+      ],
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-17",
+      "type": "Chore",
+      "estimation": 3
     },
     {
       "id": "T-045",
       "title": "Email setup & booking inquiry confirmation email",
       "milestone": "M11",
-      "labels": ["backend"],
+      "labels": [
+        "backend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-022"],
+      "depends_on": [
+        "T-022"
+      ],
       "description": "Configure email and send the first transactional email. After this ticket: submitting a booking inquiry triggers a branded confirmation email to the client.",
       "tasks": [
         "Configure mail driver in `.env` (Mailtrap for dev, or log driver as fallback)",
@@ -1463,15 +1913,24 @@
         "Mailable classes and their structure",
         "Blade email templates with custom branding",
         "Triggering emails from service classes"
-      ]
+      ],
+      "start_date": "2026-06-18",
+      "end_date": "2026-06-19",
+      "type": "Feature",
+      "estimation": 2
     },
     {
       "id": "T-046",
       "title": "Booking status update emails",
       "milestone": "M11",
-      "labels": ["backend"],
+      "labels": [
+        "backend"
+      ],
       "priority": "medium",
-      "depends_on": ["T-028", "T-045"],
+      "depends_on": [
+        "T-028",
+        "T-045"
+      ],
       "description": "Send emails to clients when the admin updates a booking's status. After this ticket: clients are automatically notified at each key stage of their session journey.",
       "tasks": [
         "Create `BookingStatusUpdatedMail` mailable with contextual messaging per status: confirmed ('Your session is confirmed for {date}!'), session_completed ('Your photos are being edited — we can't wait to share them!'), editing ('Editing is in progress'), gallery_ready ('Your gallery is ready to view!')",
@@ -1491,15 +1950,23 @@
         "Conditional email content based on business state",
         "Event-driven notification patterns",
         "Client communication design in booking applications"
-      ]
+      ],
+      "start_date": "2026-06-20",
+      "end_date": "2026-06-21",
+      "type": "Feature",
+      "estimation": 2
     },
     {
       "id": "T-047",
       "title": "Welcome email on registration",
       "milestone": "M11",
-      "labels": ["backend"],
+      "labels": [
+        "backend"
+      ],
       "priority": "low",
-      "depends_on": ["T-045"],
+      "depends_on": [
+        "T-045"
+      ],
       "description": "Send a warm welcome email when a new client registers. After this ticket: every new account receives a branded welcome message with a booking CTA.",
       "tasks": [
         "Create `WelcomeEmail` mailable: warm welcome message with the client's first name, studio intro paragraph, 'Browse Our Packages' CTA linking to /packages, photographer's name in the closing",
@@ -1518,15 +1985,24 @@
         "Queued mailables with ShouldQueue interface",
         "Async vs. synchronous email sending and why it matters",
         "Registration event hooks in Laravel"
-      ]
+      ],
+      "start_date": "2026-06-20",
+      "end_date": "2026-06-20",
+      "type": "Feature",
+      "estimation": 1
     },
     {
       "id": "T-048",
       "title": "Test environment setup & first passing test",
       "milestone": "M12",
-      "labels": ["testing", "backend"],
+      "labels": [
+        "testing",
+        "backend"
+      ],
       "priority": "high",
-      "depends_on": ["T-002"],
+      "depends_on": [
+        "T-002"
+      ],
       "description": "Set up the testing environment and write the first passing tests. After this ticket: `php artisan test` runs green.",
       "tasks": [
         "Configure `phpunit.xml` with an in-memory SQLite test database",
@@ -1547,15 +2023,24 @@
         "In-memory SQLite for fast isolated tests",
         "RefreshDatabase trait",
         "Writing the first green test"
-      ]
+      ],
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-23",
+      "type": "Chore",
+      "estimation": 3
     },
     {
       "id": "T-049",
       "title": "Feature tests: authentication & role-based access",
       "milestone": "M12",
-      "labels": ["testing", "backend"],
+      "labels": [
+        "testing",
+        "backend"
+      ],
       "priority": "high",
-      "depends_on": ["T-048"],
+      "depends_on": [
+        "T-048"
+      ],
       "description": "Write tests covering the full auth flow and role-based access controls. After this ticket: the auth system and admin gate are fully tested.",
       "tasks": [
         "Test registration: valid data → user created and logged in. Invalid (duplicate email, missing name) → validation errors",
@@ -1577,15 +2062,24 @@
         "Testing authentication flows end-to-end",
         "Testing middleware authorization",
         "Assertion methods: assertAuthenticated, assertRedirect, assertStatus"
-      ]
+      ],
+      "start_date": "2026-06-24",
+      "end_date": "2026-06-26",
+      "type": "Chore",
+      "estimation": 3
     },
     {
       "id": "T-050",
       "title": "Feature tests: packages & categories admin CRUD",
       "milestone": "M12",
-      "labels": ["testing", "backend"],
+      "labels": [
+        "testing",
+        "backend"
+      ],
       "priority": "high",
-      "depends_on": ["T-048"],
+      "depends_on": [
+        "T-048"
+      ],
       "description": "Write tests for admin package and category management. After this ticket: the core content management features are fully tested including authorization.",
       "tasks": [
         "Test category creation: valid data → category in DB with auto-generated slug. Invalid (missing name) → validation error",
@@ -1608,15 +2102,24 @@
         "Testing authorization scenarios (403)",
         "Testing slug generation",
         "Testing JSON columns and soft deletes"
-      ]
+      ],
+      "start_date": "2026-06-24",
+      "end_date": "2026-06-26",
+      "type": "Chore",
+      "estimation": 3
     },
     {
       "id": "T-051",
       "title": "Feature tests: booking inquiry flow",
       "milestone": "M12",
-      "labels": ["testing", "backend"],
+      "labels": [
+        "testing",
+        "backend"
+      ],
       "priority": "high",
-      "depends_on": ["T-048"],
+      "depends_on": [
+        "T-048"
+      ],
       "description": "Write tests covering the complete booking inquiry pipeline. After this ticket: the booking flow is fully tested from form submission to admin status update.",
       "tasks": [
         "Test booking creation: authenticated client + valid data → booking in DB with status 'inquiry' and correct HMP-XXXXXXXX number format",
@@ -1642,13 +2145,19 @@
         "Testing service classes in feature tests",
         "Testing status machine transitions",
         "Testing audit trail (history record) creation"
-      ]
+      ],
+      "start_date": "2026-06-24",
+      "end_date": "2026-06-26",
+      "type": "Chore",
+      "estimation": 5
     },
     {
       "id": "T-052",
       "title": "Production environment config & deploy script",
       "milestone": "M12",
-      "labels": ["devops"],
+      "labels": [
+        "devops"
+      ],
       "priority": "high",
       "depends_on": [],
       "description": "Prepare the app for production deployment. After this ticket: a deploy script automates the full deployment process and the app is production-ready.",
@@ -1675,7 +2184,11 @@
         "Environment-specific seeders",
         "Build pipeline automation",
         "Queue worker requirements for async features"
-      ]
+      ],
+      "start_date": "2026-06-27",
+      "end_date": "2026-06-29",
+      "type": "Chore",
+      "estimation": 5
     }
   ]
 }
