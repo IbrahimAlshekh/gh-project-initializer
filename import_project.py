@@ -181,6 +181,13 @@ query GetUser($login: String!) {
   user(login: $login) {
     id
     login
+    projectsV2(first: 100) {
+      nodes {
+        id
+        title
+        url
+      }
+    }
   }
 }
 """
@@ -190,6 +197,13 @@ query GetOrg($login: String!) {
   organization(login: $login) {
     id
     login
+    projectsV2(first: 100) {
+      nodes {
+        id
+        title
+        url
+      }
+    }
   }
 }
 """
@@ -207,23 +221,25 @@ mutation CreateProject($ownerId: ID!, $title: String!) {
 """
 
 
-def resolve_owner_id(session, owner_login: str) -> str:
+def resolve_owner_id(session, owner_login: str) -> tuple[str, list]:
     """
-    Return the GraphQL node ID for a GitHub user or organization login.
-    Tries user first; falls back to organization.
-    Exits the program if neither resolves.
+    Return (graphql_node_id, existing_projects_list) for a GitHub user or org.
+    existing_projects_list is a list of dicts with id/title/url.
+    Exits the program if neither user nor org resolves.
     """
     data = graphql(session, _OWNER_USER_QUERY, {"login": owner_login})
     if data and data.get("user"):
-        node_id = data["user"]["id"]
+        node_id  = data["user"]["id"]
+        projects = data["user"].get("projectsV2", {}).get("nodes", [])
         dim(f"Owner resolved as user: {owner_login} ({node_id})")
-        return node_id
+        return node_id, projects
 
     data = graphql(session, _OWNER_ORG_QUERY, {"login": owner_login})
     if data and data.get("organization"):
-        node_id = data["organization"]["id"]
+        node_id  = data["organization"]["id"]
+        projects = data["organization"].get("projectsV2", {}).get("nodes", [])
         dim(f"Owner resolved as organization: {owner_login} ({node_id})")
-        return node_id
+        return node_id, projects
 
     err(f'Could not resolve "{owner_login}" as a GitHub user or organization.')
     err("Check that REPO_OWNER in your .env is correct and your token has the right scopes.")
@@ -232,12 +248,19 @@ def resolve_owner_id(session, owner_login: str) -> str:
 
 def create_project_v2(session, owner_login: str, title: str) -> str:
     """
-    Create a new GitHub Project V2 under the given owner.
-    Returns the project's GraphQL node ID (used later to link issues).
+    Return a GitHub Project V2 node ID for the given owner and title.
+    Reuses an existing project with the same title instead of creating a duplicate.
     """
     step("Step 0 — Creating GitHub Project V2")
 
-    owner_id = resolve_owner_id(session, owner_login)
+    owner_id, existing_projects = resolve_owner_id(session, owner_login)
+
+    for proj in existing_projects:
+        if proj.get("title") == title:
+            warn(f'Project already exists: "{title}" — reusing it')
+            dim(f'  {proj["url"]}')
+            dim(f'  Node ID: {proj["id"]}')
+            return proj["id"]
 
     data = graphql(session, _CREATE_PROJECT_MUTATION, {"ownerId": owner_id, "title": title})
     if not data or not data.get("createProjectV2", {}).get("projectV2"):
@@ -528,7 +551,7 @@ def setup_project_fields(session, project_id: str) -> dict:
             "name": field_name,
         }
         if data_type == "SINGLE_SELECT":
-            variables["options"] = [{"name": opt, "color": "GRAY"} for opt in _TYPE_OPTIONS]
+            variables["options"] = [{"name": opt, "color": "GRAY", "description": ""} for opt in _TYPE_OPTIONS]
 
         create_data = graphql(session, _CREATE_FIELD_MUTATION, variables)
         if not create_data:
@@ -611,37 +634,64 @@ def create_issues(
     """Create each ticket as a GitHub Issue and link it to the Project V2."""
     step("Step 3 — Creating Issues & Linking to Project V2")
 
+    # Fetch all existing issues (open + closed) to detect duplicates by title.
+    info("Fetching existing issues for duplicate detection…")
+    existing_issues: dict[str, dict] = {}
+    page = 1
+    while True:
+        page_data = rest_get(
+            session,
+            f"{base_url}/issues",
+            params={"state": "all", "per_page": 100, "page": page},
+        ) or []
+        if not page_data:
+            break
+        for issue in page_data:
+            existing_issues[issue["title"]] = issue
+        if len(page_data) < 100:
+            break
+        page += 1
+    if existing_issues:
+        info(f"Found {len(existing_issues)} existing issue(s) — duplicates will be skipped.")
+
     total = len(tickets)
     for idx, ticket in enumerate(tickets, start=1):
         title = ticket.get("title", f"Untitled Ticket {idx}")
         print(f"\n  [{idx}/{total}] {BOLD}{title}{RESET}")
 
-        body             = build_issue_body(ticket)
-        local_milestone  = ticket.get("milestone")
-        milestone_number = milestone_map.get(local_milestone) if local_milestone else None
-        labels           = ticket.get("labels", [])
+        if title in existing_issues:
+            existing   = existing_issues[title]
+            issue_number  = existing["number"]
+            issue_node_id = existing["node_id"]
+            issue_url     = existing["html_url"]
+            warn(f"Issue already exists: #{issue_number} — skipping creation")
+            dim(f"  {issue_url}")
+        else:
+            body             = build_issue_body(ticket)
+            local_milestone  = ticket.get("milestone")
+            milestone_number = milestone_map.get(local_milestone) if local_milestone else None
+            labels           = ticket.get("labels", [])
+            assignees        = ticket.get("assignees", [])
 
-        assignees = ticket.get("assignees", [])
+            issue_payload: dict = {"title": title, "body": body}
+            if milestone_number:
+                issue_payload["milestone"] = milestone_number
+            if labels:
+                issue_payload["labels"] = labels
+            if assignees:
+                issue_payload["assignees"] = assignees
 
-        issue_payload: dict = {"title": title, "body": body}
-        if milestone_number:
-            issue_payload["milestone"] = milestone_number
-        if labels:
-            issue_payload["labels"] = labels
-        if assignees:
-            issue_payload["assignees"] = assignees
+            issue_data = rest_post(session, f"{base_url}/issues", issue_payload)
+            if not issue_data:
+                err(f'Skipping project link for "{title}" due to creation failure.')
+                continue
 
-        issue_data = rest_post(session, f"{base_url}/issues", issue_payload)
-        if not issue_data:
-            err(f'Skipping project link for "{title}" due to creation failure.')
-            continue
+            issue_number  = issue_data["number"]
+            issue_node_id = issue_data["node_id"]
+            issue_url     = issue_data["html_url"]
 
-        issue_number  = issue_data["number"]
-        issue_node_id = issue_data["node_id"]
-        issue_url     = issue_data["html_url"]
-
-        ok(f"Created Issue #{issue_number}: {title}")
-        dim(f"  {issue_url}")
+            ok(f"Created Issue #{issue_number}: {title}")
+            dim(f"  {issue_url}")
 
         gql_data = graphql(
             session,
