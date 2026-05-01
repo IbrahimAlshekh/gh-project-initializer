@@ -1,0 +1,55 @@
+{
+  "milestone": "M1",
+  "tickets": [
+    {
+      "id": "T-003",
+      "title": "Core feature: data model and API endpoints",
+      "priority": "High",
+      "type": "Feature",
+      "effort": "M",
+      "depends_on": ["T-002"],
+      "labels": [],
+      "description": "Create the primary data model and expose it via API endpoints. After this ticket the core resource can be created, read, updated, and deleted.",
+      "tasks": [
+        "Create the database migration for the primary resource",
+        "Create the model with validations and relationships",
+        "Implement CRUD endpoints (GET list, GET single, POST, PUT, DELETE)",
+        "Write integration tests for all endpoints"
+      ],
+      "acceptance_criteria": [
+        "All CRUD endpoints return correct status codes and response shapes",
+        "Invalid input returns 422 with field-level error messages",
+        "Integration tests cover the happy path and common error cases",
+        "API is documented (OpenAPI or equivalent)"
+      ],
+      "learning_goals": [],
+      "start_date": "2026-06-04",
+      "end_date": "2026-06-08"
+    },
+    {
+      "id": "T-004",
+      "title": "Core feature: frontend list and detail views",
+      "priority": "High",
+      "type": "Feature",
+      "effort": "M",
+      "depends_on": ["T-003"],
+      "labels": [],
+      "description": "Build the UI pages that consume the API — a paginated list and a detail view with an edit form.",
+      "tasks": [
+        "Create the list page with pagination and basic filtering",
+        "Create the detail page showing all fields",
+        "Add a create/edit form with client-side validation",
+        "Handle loading, empty, and error states"
+      ],
+      "acceptance_criteria": [
+        "List page shows all records with working pagination",
+        "Create form submits successfully and updates the list",
+        "Edit form pre-populates with existing data",
+        "Error states display useful messages to the user"
+      ],
+      "learning_goals": [],
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-13"
+    }
+  ]
+}

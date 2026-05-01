@@ -1,0 +1,62 @@
+name: Task
+description: A concrete piece of work with a clear scope
+title: "[Task]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for well-scoped tasks that implement part of a larger feature or epic.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs to be done
+      description: Describe the task clearly and concisely.
+    validations:
+      required: true
+
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Issue / Epic
+      description: Link to the parent feature or epic this task belongs to.
+      placeholder: "#42"
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Implementation Steps
+      description: Break the task into discrete implementation steps.
+      placeholder: |
+        - [ ] Step 1
+        - [ ] Step 2
+        - [ ] Step 3
+
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of Done
+      description: What does "done" look like for this task?
+      placeholder: |
+        - [ ] Code is written and working
+        - [ ] Tests pass
+        - [ ] PR reviewed and merged
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Auth
+        - Booking
+        - Portfolio
+        - Admin
+        - Public
+        - Account
+        - Infra
+        - Multiple / Unknown
+    validations:
+      required: true

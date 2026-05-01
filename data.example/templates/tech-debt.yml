@@ -1,0 +1,73 @@
+name: Tech Debt
+description: Track technical debt that needs to be addressed
+title: "[Tech Debt]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Making tech debt visible is the first step to addressing it. Be specific about the impact.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component contains this tech debt?
+      options:
+        - Auth
+        - Booking
+        - Portfolio
+        - Admin
+        - Public
+        - Account
+        - Infra
+        - Multiple / Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_state
+    attributes:
+      label: Current Behavior / State
+      description: Describe what exists today and why it's problematic.
+    validations:
+      required: true
+
+  - type: textarea
+    id: desired_state
+    attributes:
+      label: Desired Behavior / State
+      description: What should it look like after the debt is addressed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: blast_radius
+    attributes:
+      label: Blast Radius
+      description: What is the risk / impact if this debt is not addressed?
+      placeholder: |
+        - Performance impact: ...
+        - Maintainability impact: ...
+        - Security impact: ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      description: How urgently does this need to be resolved?
+      options:
+        - Critical (causing active problems)
+        - High (should fix in current phase)
+        - Medium (next phase)
+        - Low (someday/maybe)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information, related PRs, or references.

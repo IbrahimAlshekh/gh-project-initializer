@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Now",
+    "layout": "BOARD_LAYOUT",
+    "group_by": "Status",
+    "filter": "is:open",
+    "description": "Daily work — open items grouped by status"
+  },
+  {
+    "name": "Component Overview",
+    "layout": "BOARD_LAYOUT",
+    "group_by": "Component",
+    "filter": "is:open",
+    "description": "Open work grouped by component — live architectural inventory"
+  },
+  {
+    "name": "Domain Overview",
+    "layout": "BOARD_LAYOUT",
+    "group_by": "Domain",
+    "filter": "is:open",
+    "description": "Open work grouped by domain (Backend, Frontend, etc.)"
+  },
+  {
+    "name": "Roadmap",
+    "layout": "ROADMAP_LAYOUT",
+    "group_by": "Phase",
+    "filter": null,
+    "description": "Phase-based roadmap using Start Date and End Date fields"
+  },
+  {
+    "name": "Backlog",
+    "layout": "TABLE_LAYOUT",
+    "group_by": null,
+    "filter": "is:open no:assignee",
+    "sort_by": "Priority",
+    "description": "Unassigned open issues sorted by priority — triage queue"
+  },
+  {
+    "name": "Bugs",
+    "layout": "TABLE_LAYOUT",
+    "group_by": "Priority",
+    "filter": "label:bug is:open",
+    "description": "Open bugs grouped by priority"
+  },
+  {
+    "name": "Tech Debt",
+    "layout": "TABLE_LAYOUT",
+    "group_by": "Component",
+    "filter": "is:open",
+    "description": "Technical debt items grouped by component"
+  }
+]

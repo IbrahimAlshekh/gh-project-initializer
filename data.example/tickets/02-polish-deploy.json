@@ -1,0 +1,57 @@
+{
+  "milestone": "M2",
+  "tickets": [
+    {
+      "id": "T-005",
+      "title": "Write integration and unit tests",
+      "priority": "High",
+      "type": "Chore",
+      "effort": "M",
+      "depends_on": ["T-003", "T-004"],
+      "labels": [],
+      "description": "Bring test coverage to a level that makes deployment safe and refactoring confident.",
+      "tasks": [
+        "Unit test all business logic / service layer functions",
+        "Integration test all API endpoints (happy path + error cases)",
+        "Add a coverage report to CI — fail below threshold",
+        "Document how to run tests in README"
+      ],
+      "acceptance_criteria": [
+        "Test coverage is at or above the agreed threshold",
+        "CI fails when coverage drops below the threshold",
+        "All tests pass on a clean checkout"
+      ],
+      "learning_goals": [],
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-18"
+    },
+    {
+      "id": "T-006",
+      "title": "Production deployment",
+      "priority": "High",
+      "type": "Chore",
+      "effort": "S",
+      "depends_on": ["T-005"],
+      "labels": [],
+      "description": "Deploy the application to production and verify it runs correctly under real conditions.",
+      "tasks": [
+        "Configure production environment variables (secrets, DB URL, etc.)",
+        "Set up the production database and run migrations",
+        "Deploy via your chosen platform (Railway, Fly.io, Heroku, VPS, etc.)",
+        "Configure a custom domain and HTTPS",
+        "Set up error monitoring (Sentry or equivalent)",
+        "Smoke-test all critical flows in production"
+      ],
+      "acceptance_criteria": [
+        "App is accessible at the production URL over HTTPS",
+        "All environment variables are set and not committed to the repo",
+        "Migrations ran successfully against the production database",
+        "Error monitoring is active and receiving events",
+        "Critical flows work in production"
+      ],
+      "learning_goals": [],
+      "start_date": "2026-06-19",
+      "end_date": "2026-06-20"
+    }
+  ]
+}

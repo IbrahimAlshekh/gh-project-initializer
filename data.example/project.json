@@ -1,0 +1,9 @@
+{
+  "name": "my-project",
+  "description": "A brief description of your project. This becomes the GitHub Project V2 description.",
+  "tech_stack": [
+    "Python",
+    "PostgreSQL",
+    "Redis"
+  ]
+}

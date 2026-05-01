@@ -1,0 +1,54 @@
+{
+  "milestone": "M0",
+  "tickets": [
+    {
+      "id": "T-001",
+      "title": "Project setup: initialize repo and configure tooling",
+      "priority": "Critical",
+      "type": "Chore",
+      "effort": "S",
+      "depends_on": [],
+      "labels": [],
+      "description": "Bootstrap the project: create the repo, configure linting, set up CI, and document the development workflow.",
+      "tasks": [
+        "Initialize the project with your framework/language of choice",
+        "Configure linting and code formatting tools",
+        "Add a basic CI pipeline (GitHub Actions) that runs lint and tests on every PR",
+        "Document the development setup in README.md"
+      ],
+      "acceptance_criteria": [
+        "Project runs locally with a single setup command",
+        "CI passes on a blank PR",
+        "README covers: prerequisites, setup, running tests, and branching convention"
+      ],
+      "learning_goals": [],
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-02"
+    },
+    {
+      "id": "T-002",
+      "title": "Database setup: configure connection and run initial migration",
+      "priority": "Critical",
+      "type": "Chore",
+      "effort": "XS",
+      "depends_on": ["T-001"],
+      "labels": [],
+      "description": "Connect the application to the database and create the initial schema.",
+      "tasks": [
+        "Configure database connection via environment variables",
+        "Create the initial migration (users table or equivalent)",
+        "Seed a default admin or test record",
+        "Verify the connection with a health check endpoint"
+      ],
+      "acceptance_criteria": [
+        "App connects to the database without errors",
+        "Initial migration runs cleanly",
+        "Seed data is created on first run",
+        "Health check endpoint returns 200 with database status"
+      ],
+      "learning_goals": [],
+      "start_date": "2026-06-03",
+      "end_date": "2026-06-03"
+    }
+  ]
+}

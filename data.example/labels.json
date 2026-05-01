@@ -1,0 +1,32 @@
+[
+  {
+    "name": "good-first-issue",
+    "color": "7057ff",
+    "description": "Good for newcomers"
+  },
+  {
+    "name": "help-wanted",
+    "color": "008672",
+    "description": "Extra attention is needed"
+  },
+  {
+    "name": "needs-adr",
+    "color": "d4c5f9",
+    "description": "Requires an Architecture Decision Record before implementation"
+  },
+  {
+    "name": "needs-design",
+    "color": "f9d0c4",
+    "description": "Requires UI/UX design work before implementation"
+  },
+  {
+    "name": "breaking-change",
+    "color": "d73a4a",
+    "description": "Introduces a breaking change to the API or DB schema"
+  },
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Something is not working as expected"
+  }
+]

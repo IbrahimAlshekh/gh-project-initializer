@@ -1,0 +1,76 @@
+[
+  {
+    "name": "Component",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "Auth",     "color": "BLUE",   "description": "Authentication & authorization"},
+      {"name": "API",      "color": "GREEN",  "description": "API endpoints & business logic"},
+      {"name": "Frontend", "color": "PURPLE", "description": "UI & client-side code"},
+      {"name": "Database", "color": "ORANGE", "description": "Migrations, models & queries"},
+      {"name": "Infra",    "color": "GRAY",   "description": "CI/CD, deployment, config"}
+    ]
+  },
+  {
+    "name": "Domain",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "Backend",    "color": "GREEN",  "description": "Server-side logic"},
+      {"name": "Frontend",   "color": "BLUE",   "description": "Client-side code"},
+      {"name": "Database",   "color": "PURPLE", "description": "Persistence layer"},
+      {"name": "DevOps",     "color": "ORANGE", "description": "Infrastructure & deployment"},
+      {"name": "Full-stack", "color": "GRAY",   "description": "End-to-end vertical slice"}
+    ]
+  },
+  {
+    "name": "Type",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "Feature",   "color": "GREEN",  "description": "New user-facing functionality"},
+      {"name": "Chore",     "color": "GRAY",   "description": "Maintenance, setup, refactor"},
+      {"name": "Bug",       "color": "RED",    "description": "Something is broken"},
+      {"name": "Tech Debt", "color": "ORANGE", "description": "Code quality improvement"},
+      {"name": "Spike",     "color": "BLUE",   "description": "Research & investigation"},
+      {"name": "Docs",      "color": "YELLOW", "description": "Documentation"}
+    ]
+  },
+  {
+    "name": "Priority",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "Critical", "color": "RED",    "description": "Blocker — must be done now"},
+      {"name": "High",     "color": "ORANGE", "description": "Important, do soon"},
+      {"name": "Medium",   "color": "YELLOW", "description": "Normal priority"},
+      {"name": "Low",      "color": "GRAY",   "description": "Nice to have"}
+    ]
+  },
+  {
+    "name": "Effort",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "XS", "color": "GRAY",   "description": "< 1 day"},
+      {"name": "S",  "color": "GREEN",  "description": "1–2 days"},
+      {"name": "M",  "color": "YELLOW", "description": "3–5 days"},
+      {"name": "L",  "color": "ORANGE", "description": "1–2 weeks"},
+      {"name": "XL", "color": "RED",    "description": "Needs to be split"}
+    ]
+  },
+  {
+    "name": "Phase",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "Foundation",      "color": "GRAY",   "description": "Setup & scaffolding"},
+      {"name": "Core Features",   "color": "GREEN",  "description": "Primary feature set"},
+      {"name": "Enhancement",     "color": "BLUE",   "description": "Additional functionality"},
+      {"name": "Polish",          "color": "PURPLE", "description": "UX improvements & hardening"},
+      {"name": "Testing & Deploy","color": "ORANGE", "description": "QA & production readiness"}
+    ]
+  },
+  {
+    "name": "Start Date",
+    "data_type": "DATE"
+  },
+  {
+    "name": "End Date",
+    "data_type": "DATE"
+  }
+]

@@ -1,0 +1,72 @@
+name: Feature Request
+description: Propose a new feature or enhancement
+title: "[Feature]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the feature you'd like to see. Focus on the user need, not the implementation.
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: User Story
+      description: Describe the feature from the user's perspective.
+      placeholder: "As a [type of user], I want [some goal] so that [some reason]."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem it Solves
+      description: What problem or need does this feature address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know when this feature is complete?
+      placeholder: |
+        - [ ] User can ...
+        - [ ] Admin can ...
+        - [ ] No regression in ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the system does this affect?
+      options:
+        - Auth
+        - Booking
+        - Portfolio
+        - Admin
+        - Public
+        - Account
+        - Infra
+        - Multiple / Unknown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: adr_needed
+    attributes:
+      label: ADR Required?
+      description: Does this feature require an Architecture Decision Record?
+      options:
+        - "No"
+        - "Yes — I'll open a separate ADR issue"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Mockups, references, related issues, or any other relevant context.

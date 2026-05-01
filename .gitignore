@@ -1,6 +1,9 @@
 # Environment
 .env
 
+# Project-specific data (copy data.example/ to data/ and fill in your project)
+/data/
+
 # Python
 __pycache__/
 *.py[cod]

@@ -1,0 +1,68 @@
+name: Spike / Research
+description: Time-boxed research or investigation task
+title: "[Spike]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A spike is a time-boxed investigation to reduce uncertainty. It must produce a concrete output.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question to Answer
+      description: What specific question or uncertainty does this spike address?
+      placeholder: "Can we use X to solve Y? What are the tradeoffs between A and B?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why This Matters
+      description: What decision or task is blocked until this is answered?
+    validations:
+      required: true
+
+  - type: input
+    id: time_box
+    attributes:
+      label: Time Box
+      description: Maximum time to spend on this spike.
+      placeholder: "2 days"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: output_type
+    attributes:
+      label: Expected Output
+      description: What will be produced at the end of this spike?
+      options:
+        - ADR (Architecture Decision Record)
+        - Written summary / recommendation
+        - Proof-of-concept prototype
+        - Updated ticket / implementation plan
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed Approach
+      description: How do you plan to investigate this?
+      placeholder: |
+        - Read documentation for X
+        - Build a minimal prototype
+        - Compare options A vs B on criteria: performance, maintainability, cost
+
+  - type: textarea
+    id: done_criteria
+    attributes:
+      label: Done When
+      description: How will you know the spike is complete?
+      placeholder: "The output document is written and a follow-up task is created."
+    validations:
+      required: true
