@@ -9,19 +9,19 @@ body:
         Making tech debt visible is the first step to addressing it. Be specific about the impact.
 
   - type: dropdown
-    id: component
+    id: component_field
     attributes:
       label: Component
       description: Which component contains this tech debt?
       options:
-        - Auth
-        - Booking
-        - Portfolio
-        - Admin
-        - Public
-        - Account
-        - Infra
-        - Multiple / Unknown
+        - crate:core
+        - crate:shared
+        - crate:server
+        - crate:app
+        - crate:core-wasm
+        - client:tv
+        - infra
+        - docs
     validations:
       required: true
 

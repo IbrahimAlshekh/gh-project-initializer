@@ -2,16 +2,16 @@
   {
     "id": "M0",
     "title": "M0 - Foundation",
-    "description": "Project setup, tooling, and scaffolding. After this milestone the repo is clean, the database is connected, and the development workflow is in place."
+    "description": "Project setup, tooling, and scaffolding."
   },
   {
     "id": "M1",
-    "title": "M1 - Core Feature",
-    "description": "The primary feature that makes the product useful. Users can complete the main workflow end-to-end."
+    "title": "M1 - MVP Features",
+    "description": "Core functionality for the Minimum Viable Product."
   },
   {
     "id": "M2",
-    "title": "M2 - Polish & Deploy",
-    "description": "Error handling, tests, performance, and production deployment. The product is ready for real users."
+    "title": "M2 - Polish & Launch",
+    "description": "Hardening, UX improvements, and production readiness."
   }
 ]

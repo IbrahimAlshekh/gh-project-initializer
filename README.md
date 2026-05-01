@@ -9,14 +9,14 @@ A Python script that reads a structured `data/` directory and bootstraps a GitHu
 | Feature | Details |
 |---|---|
 | **GitHub Project V2** | Created (or reused if it exists) |
-| **Custom fields** | Up to 8 fields: Component, Domain, Type, Priority, Effort, Phase, Start Date, End Date |
-| **Views** | 7 views: Now (board), Component Overview, Domain Overview, Roadmap, Backlog, Bugs, Tech Debt |
+| **Custom fields** | 8 standard fields: Component, Domain, Type, Status, Priority, Effort, Phase, Start/End Date |
+| **Views** | 7 optimized views: Now, Component/Domain Overviews, Roadmap, Backlog, Bugs, Tech Debt |
 | **Milestones** | Created from `milestones.json`, skipped if they already exist |
-| **Labels** | Strategic labels from `labels.json` (not duplicating field values) |
-| **Issues** | Created from `tickets/*.json` with rich markdown bodies, linked to the project |
-| **Issue templates** | 5 YAML forms pushed to `.github/ISSUE_TEMPLATE/` in the target repo |
+| **Labels** | Strategic labels from `labels.json` (e.g., `needs-adr`, `breaking-change`) |
+| **Issues** | Created from `tickets/*.json` with rich markdown bodies and project field mapping |
+| **Issue templates** | 5 YAML forms pushed to `.github/ISSUE_TEMPLATE/` (Bug, Feature, Task, Spike, Tech Debt) |
 
-All field values (Priority, Effort, Type, etc.) are set on each issue in the project automatically.
+All field values are set on each issue in the project automatically. The structure follows a **filterable database** mental model, allowing you to slice and dice your work by architecture (Component) or business area (Domain).
 
 ## Installation
 
@@ -49,7 +49,7 @@ Your token needs the `repo` and `project` scopes.
 
 ## Setup for your project
 
-`data.example/` is a working example you can use as a starting point. Copy it to `data/` and replace the example content with your project's details:
+`data.example/` is a "best-practice" template you can use as a starting point. Copy it to `data/` and replace the example content with your project's details:
 
 ```bash
 cp -r data.example data
@@ -62,12 +62,22 @@ Then edit the files in `data/`:
 | `project.json` | Your project name and description |
 | `milestones.json` | Your milestones |
 | `fields.json` | Adjust component/domain/phase options to match your architecture |
-| `views.json` | Keep as-is or add/remove views |
+| `views.json` | Keep as-is to use the 7 recommended views |
 | `labels.json` | Keep as-is or add project-specific labels |
 | `tickets/*.json` | Replace example tickets with your own — one file per milestone |
-| `templates/*.yml` | Keep as-is or customize the issue form fields |
+| `templates/*.yml` | Forms that enforce structure on new issues |
 
-`data/` is git-ignored so it stays local. `data.example/` is tracked and reusable across projects.
+`data/` is git-ignored so it stays local. `data.example/` is tracked and reflects the latest project management standards.
+
+## Issue Hierarchy: Epics → Features → Tasks
+
+The tool and example data encourage a three-level hierarchy:
+
+1. **Epics:** Large initiatives (Type=Epic, Phase=MVP).
+2. **Features:** Specific functionalities (Type=Feature).
+3. **Tasks:** Concrete implementation items (Type=Task, Component=crate:server).
+
+Each issue tracks its parent and contributes to the overall architectural overview in the **Component Overview** view.
 
 ## Data directory layout
 
@@ -135,6 +145,20 @@ python import_project.py path/to/data/
 ```
 
 The script is fully idempotent — running it again on an existing repo skips anything that already exists (project, milestones, labels, issues, templates).
+
+## AI Agent Integration
+
+This project is designed to be "AI-native". You can use AI agents to generate your entire project structure and then use this tool to deploy it.
+
+### 1. Generate your project data
+Use the [AI Project Generation Prompt](PROMPT.md) to have an AI agent (Claude, ChatGPT, etc.) generate your `data/` directory content based on your project idea.
+
+### 2. Instructions for AI Agents
+If you are an AI agent working on this project, follow these rules:
+- **Data Schema:** Always refer to `data.example/` for the correct JSON/YAML schemas.
+- **Incremental Updates:** To add new tickets, create a new JSON file in `data/tickets/` and run `python import_project.py`. The script will only create the new issues.
+- **Field Values:** Ensure `priority`, `type`, `effort`, `component`, `domain`, and `phase` values match the options defined in `data/fields.json`.
+- **Validation:** Before running the script, ensure all `depends_on` IDs exist within the current or previous ticket files.
 
 ## Notes
 

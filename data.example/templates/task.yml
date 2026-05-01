@@ -46,17 +46,17 @@ body:
       required: true
 
   - type: dropdown
-    id: component
+    id: component_field
     attributes:
       label: Component
       options:
-        - Auth
-        - Booking
-        - Portfolio
-        - Admin
-        - Public
-        - Account
-        - Infra
-        - Multiple / Unknown
+        - crate:core
+        - crate:shared
+        - crate:server
+        - crate:app
+        - crate:core-wasm
+        - client:tv
+        - infra
+        - docs
     validations:
       required: true

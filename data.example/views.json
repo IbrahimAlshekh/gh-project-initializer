@@ -10,43 +10,43 @@
     "name": "Component Overview",
     "layout": "BOARD_LAYOUT",
     "group_by": "Component",
-    "filter": "is:open",
-    "description": "Open work grouped by component — live architectural inventory"
+    "filter": "is:open Status:!Done",
+    "description": "Open work per crate — live architectural inventory"
   },
   {
     "name": "Domain Overview",
     "layout": "BOARD_LAYOUT",
     "group_by": "Domain",
-    "filter": "is:open",
-    "description": "Open work grouped by domain (Backend, Frontend, etc.)"
+    "filter": "is:open Status:!Done",
+    "description": "Business area progress"
   },
   {
     "name": "Roadmap",
     "layout": "ROADMAP_LAYOUT",
     "group_by": "Phase",
     "filter": null,
-    "description": "Phase-based roadmap using Start Date and End Date fields"
+    "description": "Phase-based roadmap"
   },
   {
-    "name": "Backlog",
+    "name": "Backlog Triage",
     "layout": "TABLE_LAYOUT",
     "group_by": null,
-    "filter": "is:open no:assignee",
+    "filter": "is:open Status:Backlog",
     "sort_by": "Priority",
-    "description": "Unassigned open issues sorted by priority — triage queue"
+    "description": "New issues to triage"
   },
   {
     "name": "Bugs",
     "layout": "TABLE_LAYOUT",
     "group_by": "Priority",
-    "filter": "label:bug is:open",
-    "description": "Open bugs grouped by priority"
+    "filter": "is:open Type:Bug",
+    "description": "Bug tracking"
   },
   {
     "name": "Tech Debt",
     "layout": "TABLE_LAYOUT",
     "group_by": "Component",
-    "filter": "is:open",
-    "description": "Technical debt items grouped by component"
+    "filter": "is:open Type:\"Tech Debt\"",
+    "description": "Debt visibility per component"
   }
 ]

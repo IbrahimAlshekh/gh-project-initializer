@@ -3,66 +3,90 @@
     "name": "Component",
     "data_type": "SINGLE_SELECT",
     "options": [
-      {"name": "Auth",     "color": "BLUE",   "description": "Authentication & authorization"},
-      {"name": "API",      "color": "GREEN",  "description": "API endpoints & business logic"},
-      {"name": "Frontend", "color": "PURPLE", "description": "UI & client-side code"},
-      {"name": "Database", "color": "ORANGE", "description": "Migrations, models & queries"},
-      {"name": "Infra",    "color": "GRAY",   "description": "CI/CD, deployment, config"}
+      {"name": "crate:core",      "color": "BLUE",   "description": "Core logic"},
+      {"name": "crate:shared",    "color": "CYAN",   "description": "Shared utilities"},
+      {"name": "crate:server",    "color": "GREEN",  "description": "Backend server"},
+      {"name": "crate:app",       "color": "PURPLE", "description": "Mobile/Desktop app"},
+      {"name": "crate:core-wasm", "color": "TEAL",   "description": "WASM bindings"},
+      {"name": "client:tv",       "color": "INDIGO", "description": "TV Client"},
+      {"name": "infra",           "color": "GRAY",   "description": "Infrastructure"},
+      {"name": "docs",            "color": "YELLOW", "description": "Documentation"}
     ]
   },
   {
     "name": "Domain",
     "data_type": "SINGLE_SELECT",
     "options": [
-      {"name": "Backend",    "color": "GREEN",  "description": "Server-side logic"},
-      {"name": "Frontend",   "color": "BLUE",   "description": "Client-side code"},
-      {"name": "Database",   "color": "PURPLE", "description": "Persistence layer"},
-      {"name": "DevOps",     "color": "ORANGE", "description": "Infrastructure & deployment"},
-      {"name": "Full-stack", "color": "GRAY",   "description": "End-to-end vertical slice"}
+      {"name": "auth",         "color": "RED",    "description": "Authentication"},
+      {"name": "billing",      "color": "GREEN",  "description": "Payments & Billing"},
+      {"name": "subscription", "color": "BLUE",   "description": "Subscription mgmt"},
+      {"name": "reseller",     "color": "ORANGE", "description": "Reseller system"},
+      {"name": "sync",         "color": "CYAN",   "description": "Data synchronization"},
+      {"name": "player",       "color": "PURPLE", "description": "Media player"},
+      {"name": "epg",          "color": "PINK",   "description": "Electronic Program Guide"},
+      {"name": "vod",          "color": "YELLOW", "description": "Video on Demand"},
+      {"name": "admin",        "color": "GRAY",   "description": "Admin panel"},
+      {"name": "security",     "color": "RED",    "description": "Security audits/fixes"},
+      {"name": "platform",     "color": "GRAY",   "description": "Platform stability"},
+      {"name": "landing",      "color": "GREEN",  "description": "Marketing/Landing page"}
     ]
   },
   {
     "name": "Type",
     "data_type": "SINGLE_SELECT",
     "options": [
-      {"name": "Feature",   "color": "GREEN",  "description": "New user-facing functionality"},
-      {"name": "Chore",     "color": "GRAY",   "description": "Maintenance, setup, refactor"},
-      {"name": "Bug",       "color": "RED",    "description": "Something is broken"},
-      {"name": "Tech Debt", "color": "ORANGE", "description": "Code quality improvement"},
-      {"name": "Spike",     "color": "BLUE",   "description": "Research & investigation"},
-      {"name": "Docs",      "color": "YELLOW", "description": "Documentation"}
+      {"name": "Epic",       "color": "PURPLE", "description": "Large initiative"},
+      {"name": "Feature",    "color": "GREEN",  "description": "New functionality"},
+      {"name": "Task",       "color": "BLUE",   "description": "Small work item"},
+      {"name": "Bug",        "color": "RED",    "description": "Defect"},
+      {"name": "Tech Debt",  "color": "ORANGE", "description": "Code quality"},
+      {"name": "Spike",      "color": "YELLOW", "description": "Research"},
+      {"name": "Docs",       "color": "GRAY",   "description": "Documentation"}
+    ]
+  },
+  {
+    "name": "Status",
+    "data_type": "SINGLE_SELECT",
+    "options": [
+      {"name": "Backlog",     "color": "GRAY",   "description": "Proposed items"},
+      {"name": "Triaged",     "color": "BLUE",   "description": "Reviewed & accepted"},
+      {"name": "Ready",       "color": "CYAN",   "description": "Ready for dev"},
+      {"name": "In Progress", "color": "YELLOW", "description": "Active work"},
+      {"name": "In Review",   "color": "PURPLE", "description": "Code review"},
+      {"name": "Blocked",     "color": "RED",    "description": "Stalled"},
+      {"name": "Done",        "color": "GREEN",  "description": "Completed"}
     ]
   },
   {
     "name": "Priority",
     "data_type": "SINGLE_SELECT",
     "options": [
-      {"name": "Critical", "color": "RED",    "description": "Blocker — must be done now"},
-      {"name": "High",     "color": "ORANGE", "description": "Important, do soon"},
-      {"name": "Medium",   "color": "YELLOW", "description": "Normal priority"},
-      {"name": "Low",      "color": "GRAY",   "description": "Nice to have"}
+      {"name": "P0", "color": "RED",    "description": "Blocker"},
+      {"name": "P1", "color": "ORANGE", "description": "High"},
+      {"name": "P2", "color": "YELLOW", "description": "Medium"},
+      {"name": "P3", "color": "GRAY",   "description": "Low"}
     ]
   },
   {
     "name": "Effort",
     "data_type": "SINGLE_SELECT",
     "options": [
-      {"name": "XS", "color": "GRAY",   "description": "< 1 day"},
-      {"name": "S",  "color": "GREEN",  "description": "1–2 days"},
-      {"name": "M",  "color": "YELLOW", "description": "3–5 days"},
-      {"name": "L",  "color": "ORANGE", "description": "1–2 weeks"},
-      {"name": "XL", "color": "RED",    "description": "Needs to be split"}
+      {"name": "XS", "color": "GRAY",   "description": "<1d"},
+      {"name": "S",  "color": "GREEN",  "description": "1–2d"},
+      {"name": "M",  "color": "YELLOW", "description": "3–5d"},
+      {"name": "L",  "color": "ORANGE", "description": "1–2w"},
+      {"name": "XL", "color": "RED",    "description": "Split required"}
     ]
   },
   {
     "name": "Phase",
     "data_type": "SINGLE_SELECT",
     "options": [
-      {"name": "Foundation",      "color": "GRAY",   "description": "Setup & scaffolding"},
-      {"name": "Core Features",   "color": "GREEN",  "description": "Primary feature set"},
-      {"name": "Enhancement",     "color": "BLUE",   "description": "Additional functionality"},
-      {"name": "Polish",          "color": "PURPLE", "description": "UX improvements & hardening"},
-      {"name": "Testing & Deploy","color": "ORANGE", "description": "QA & production readiness"}
+      {"name": "MVP",    "color": "GREEN",  "description": "Minimum Viable Product"},
+      {"name": "v1.0",   "color": "BLUE",   "description": "First stable release"},
+      {"name": "v1.1",   "color": "CYAN",   "description": "Minor updates"},
+      {"name": "v2.0",   "color": "PURPLE", "description": "Major overhaul"},
+      {"name": "Future", "color": "GRAY",   "description": "Post-launch ideas"}
     ]
   },
   {

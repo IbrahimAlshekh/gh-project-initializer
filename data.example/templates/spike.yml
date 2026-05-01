@@ -48,6 +48,23 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: component_field
+    attributes:
+      label: Component
+      description: Which part of the system is affected?
+      options:
+        - crate:core
+        - crate:shared
+        - crate:server
+        - crate:app
+        - crate:core-wasm
+        - client:tv
+        - infra
+        - docs
+    validations:
+      required: true
+
   - type: textarea
     id: approach
     attributes:
