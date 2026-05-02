@@ -558,66 +558,14 @@ def setup_project_fields(session, project_id: str, field_defs: list) -> dict:
 # Step 2 — Views
 # ---------------------------------------------------------------------------
 
-_GET_PROJECT_VIEWS_QUERY = """
-query GetProjectViews($projectId: ID!) {
-  node(id: $projectId) {
-    ... on ProjectV2 {
-      views(first: 50) {
-        nodes {
-          id
-          name
-          layout
-        }
-      }
-    }
-  }
-}
-"""
-
-_CREATE_VIEW_MUTATION = """
-mutation CreateView($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
-  createProjectV2View(input: {
-    projectId: $projectId
-    name: $name
-    layout: $layout
-  }) {
-    projectV2View {
-      id
-      name
-      layout
-    }
-  }
-}
-"""
-
-_UPDATE_VIEW_MUTATION = """
-mutation UpdateView(
-  $projectId: ID!,
-  $viewId: ID!,
-  $filter: String,
-  $groupByFieldIds: [ID!],
-  $sortByFields: [ProjectV2ViewSortByField!]
-) {
-  updateProjectV2View(input: {
-    projectId: $projectId
-    viewId: $viewId
-    filter: $filter
-    groupByFields: $groupByFieldIds
-    sortByFields: $sortByFields
-  }) {
-    projectV2View {
-      id
-      name
-    }
-  }
-}
-"""
 
 
 def setup_project_views(session, project_id: str, view_defs: list, fields: dict) -> None:
     """
     Ensure all views defined in views.json exist on the project.
-    Creates views that don't exist and applies filter/group-by configuration.
+    NOTE: As of mid-2024, the GitHub GraphQL API does not officially support 
+    creating or updating ProjectV2 views. These mutations often fail with 
+    "Field 'createProjectV2View' doesn't exist on type 'Mutation'".
     """
     step("Step 2 — Setting up Project V2 views")
 
@@ -625,70 +573,12 @@ def setup_project_views(session, project_id: str, view_defs: list, fields: dict)
         info("No view definitions found — skipping views setup.")
         return
 
-    # Fetch existing views for idempotency
-    views_data = graphql(session, _GET_PROJECT_VIEWS_QUERY, {"projectId": project_id})
-    existing_views: dict[str, str] = {}  # name -> id
-    if views_data:
-        for node in views_data["node"]["views"]["nodes"]:
-            if node:
-                existing_views[node["name"]] = node["id"]
-
-    for view_def in view_defs:
-        name   = view_def["name"]
-        layout = view_def["layout"]
-
-        if name in existing_views:
-            warn(f'View already exists: "{name}" — skipping')
-            continue
-
-        # Create the view
-        create_data = graphql(
-            session,
-            _CREATE_VIEW_MUTATION,
-            {"projectId": project_id, "name": name, "layout": layout},
-        )
-        if not create_data:
-            warn(f'Failed to create view "{name}"')
-            continue
-
-        view = create_data.get("createProjectV2View", {}).get("projectV2View")
-        if not view:
-            warn(f'No view returned when creating "{name}"')
-            continue
-
-        view_id = view["id"]
-        ok(f'Created view: "{name}" ({layout})')
-
-        # Apply filter and group-by
-        filter_str    = view_def.get("filter")
-        group_by_name = view_def.get("group_by")
-
-        group_by_ids = None
-        if group_by_name:
-            group_field = fields.get(_field_key(group_by_name))
-            if group_field:
-                group_by_ids = [group_field["id"]]
-            else:
-                warn(f'  Group-by field "{group_by_name}" not found in fields — skipping')
-
-        if filter_str or group_by_ids:
-            update_vars: dict = {
-                "projectId":      project_id,
-                "viewId":         view_id,
-                "filter":         filter_str,
-                "groupByFieldIds": group_by_ids,
-                "sortByFields":   None,
-            }
-            upd = graphql(session, _UPDATE_VIEW_MUTATION, update_vars)
-            if upd:
-                parts = []
-                if filter_str:   parts.append(f"filter={filter_str!r}")
-                if group_by_ids: parts.append(f"group_by={group_by_name}")
-                dim(f"  Applied: {', '.join(parts)}")
-            else:
-                warn(f'  Could not configure view "{name}" — view was created but filter/group-by not applied.')
-
-        time.sleep(0.3)  # brief pause between view creations
+    warn("View creation via API is currently unsupported by GitHub (GraphQL errors expected).")
+    info("You may need to create these views manually in the GitHub UI:")
+    for v in view_defs:
+        dim(f"  • {v['name']} ({v['layout']})")
+    
+    return # Skipping the rest of the function due to API limitations
 
 
 # ---------------------------------------------------------------------------

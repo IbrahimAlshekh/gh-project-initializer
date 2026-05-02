@@ -4,13 +4,14 @@
     "data_type": "SINGLE_SELECT",
     "options": [
       {"name": "crate:core",      "color": "BLUE",   "description": "Core logic"},
-      {"name": "crate:shared",    "color": "CYAN",   "description": "Shared utilities"},
+      {"name": "crate:shared",    "color": "ORANGE", "description": "Shared utilities"},
       {"name": "crate:server",    "color": "GREEN",  "description": "Backend server"},
       {"name": "crate:app",       "color": "PURPLE", "description": "Mobile/Desktop app"},
-      {"name": "crate:core-wasm", "color": "TEAL",   "description": "WASM bindings"},
-      {"name": "client:tv",       "color": "INDIGO", "description": "TV Client"},
+      {"name": "crate:core-wasm", "color": "PINK",   "description": "WASM bindings"},
+      {"name": "client:tv",       "color": "RED",    "description": "TV Client"},
       {"name": "infra",           "color": "GRAY",   "description": "Infrastructure"},
-      {"name": "docs",            "color": "YELLOW", "description": "Documentation"}
+      {"name": "docs",            "color": "YELLOW", "description": "Documentation"},
+      {"name": "design",          "color": "PINK",   "description": "UI/UX design"}
     ]
   },
   {
@@ -21,14 +22,15 @@
       {"name": "billing",      "color": "GREEN",  "description": "Payments & Billing"},
       {"name": "subscription", "color": "BLUE",   "description": "Subscription mgmt"},
       {"name": "reseller",     "color": "ORANGE", "description": "Reseller system"},
-      {"name": "sync",         "color": "CYAN",   "description": "Data synchronization"},
+      {"name": "sync",         "color": "BLUE",   "description": "Data synchronization"},
       {"name": "player",       "color": "PURPLE", "description": "Media player"},
       {"name": "epg",          "color": "PINK",   "description": "Electronic Program Guide"},
       {"name": "vod",          "color": "YELLOW", "description": "Video on Demand"},
       {"name": "admin",        "color": "GRAY",   "description": "Admin panel"},
       {"name": "security",     "color": "RED",    "description": "Security audits/fixes"},
       {"name": "platform",     "color": "GRAY",   "description": "Platform stability"},
-      {"name": "landing",      "color": "GREEN",  "description": "Marketing/Landing page"}
+      {"name": "landing",      "color": "GREEN",  "description": "Marketing/Landing page"},
+      {"name": "legal",        "color": "GRAY",   "description": "Legal & Compliance"}
     ]
   },
   {
@@ -50,7 +52,7 @@
     "options": [
       {"name": "Backlog",     "color": "GRAY",   "description": "Proposed items"},
       {"name": "Triaged",     "color": "BLUE",   "description": "Reviewed & accepted"},
-      {"name": "Ready",       "color": "CYAN",   "description": "Ready for dev"},
+      {"name": "Ready",       "color": "BLUE",   "description": "Ready for dev"},
       {"name": "In Progress", "color": "YELLOW", "description": "Active work"},
       {"name": "In Review",   "color": "PURPLE", "description": "Code review"},
       {"name": "Blocked",     "color": "RED",    "description": "Stalled"},
@@ -84,7 +86,7 @@
     "options": [
       {"name": "MVP",    "color": "GREEN",  "description": "Minimum Viable Product"},
       {"name": "v1.0",   "color": "BLUE",   "description": "First stable release"},
-      {"name": "v1.1",   "color": "CYAN",   "description": "Minor updates"},
+      {"name": "v1.1",   "color": "BLUE",   "description": "Minor updates"},
       {"name": "v2.0",   "color": "PURPLE", "description": "Major overhaul"},
       {"name": "Future", "color": "GRAY",   "description": "Post-launch ideas"}
     ]

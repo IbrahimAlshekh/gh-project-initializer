@@ -28,5 +28,20 @@
     "name": "bug",
     "color": "d73a4a",
     "description": "Something is not working as expected"
+  },
+  {
+    "name": "design",
+    "color": "f9d0c4",
+    "description": "UI/UX design"
+  },
+  {
+    "name": "legal",
+    "color": "cfd3d7",
+    "description": "Legal & Compliance"
+  },
+  {
+    "name": "strategy",
+    "color": "fef2c0",
+    "description": "Strategy"
   }
 ]
